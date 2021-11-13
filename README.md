@@ -28,6 +28,6 @@ Finally, the sushi chef need to defeat the Evil Sushi boss and collect a amount 
 
 Assets example:
 
-| ![sushiChief](.\images\examples\sushiChief.png) |      |      |
-| :---------------------------------------------: | ---- | ---- |
+| ![sushiChief](https://github.com/LOOK2001/Sushi-Challenge/tree/main/images/examples/sushiChief.png) |      |      |
+| :----------------------------------------------------------: | ---- | ---- |
 
