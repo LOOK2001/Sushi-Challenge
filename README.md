@@ -31,3 +31,12 @@ Assets example:
 | ![sushiChief](images/examples/sushiChief.png) |      |      |
 | :-------------------------------------------: | ---- | ---- |
 
+
+
+Reference:
+
+https://opengameart.org/content/customizable-character-pack
+
+https://opengameart.org/content/lots-of-free-2d-tiles-and-sprites-by-hyptosis
+
+https://pixelfrog-assets.itch.io/kings-and-pigs
