@@ -8,7 +8,7 @@ Food (cucumber, carrot, rice, salmon, etc.) begin attacking him. The sushi chef 
 
 Finally, the sushi chef need to defeat the Evil Sushi boss and collect a amount of sushi to run away.
 
-![sushiChief](images/examples/Untitled-1.png)
+![sushiChief](images/examples/rules.png)
 
 
 - [ ] **AI:** 
