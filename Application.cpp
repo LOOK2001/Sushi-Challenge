@@ -12,7 +12,7 @@ Application::Application(const std::string& name /*= "CPSC-6041"*/)
 	fps = 60;
 	frame_duration = 1000 / fps;
 
-	current_scene = new SceneHw4();
+	current_scene = new ExampleScene();
 	Global::SetActiveScene(current_scene);
 }
 

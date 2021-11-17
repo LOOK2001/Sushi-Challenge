@@ -8,10 +8,12 @@ Food (cucumber, carrot, rice, salmon, etc.) begin attacking him. The sushi chef 
 
 Finally, the sushi chef need to defeat the Evil Sushi boss and collect a amount of sushi to run away.
 
+![sushiChief](images/examples/Untitled-1.png)
+
 
 - [ ] **AI:** 
   - [ ] **finite state machine (like patrol, chase, attack) reference: https://learn.unity.com/tutorial/pluggable-ai-with-scriptable-objects#5c7f8528edbc2a002053b48a**
-  - [ ]  **A* if we have time**
+  - [ ]  **(A*) if we have time**
 - [ ] **Start/Finish screens:**
   - [ ] **start screen that starts the game following player input and add a finish ("Game Over") screen that plays when the player dies**
 - [ ] **In-play UI:**

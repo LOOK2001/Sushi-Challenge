@@ -59,7 +59,7 @@ protected:
 
 
 // SceneHw3 Declaration:
-class SceneHw4 : public Scene
+class ExampleScene : public Scene
 {
 public:
 	virtual void init()
