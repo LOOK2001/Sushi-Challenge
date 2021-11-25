@@ -7,6 +7,7 @@
 #include "GameObject.h"
 #include "Sprite.h"
 #include "Global.h"
+#include "Weapon.h"
 
 
 enum CtrlMode
@@ -61,6 +62,7 @@ private:
 	std::string current_state;
 	bool draw_skin;
 	SDL_Color skin_color;
+	Weapon* weapon;
 };
 
 #endif // CHARACTER_H

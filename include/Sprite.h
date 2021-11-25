@@ -16,8 +16,8 @@ public:
 		frame_duration = duration;
 		last_frame_time = 0;
 
-		view.w = GetWidth() / count;
-		view.h = GetHeight();
+		view.w = GetImgWidth() / count;
+		view.h = GetImagHeight();
 		view.x = 0;
 		view.y = 0;
 	};

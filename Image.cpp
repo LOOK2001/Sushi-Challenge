@@ -78,7 +78,7 @@ void Image::Draw(float _x, float _y, float scale) const
 	}
 }
 
-void Image::Draw(float _x, float _y, double angle, const SDL_FPoint* center, const SDL_RendererFlip flip /*= SDL_FLIP_NONE*/, float scale /*= 1*/) const
+void Image::Draw(float _x, float _y, double angle, const SDL_FPoint* _center, const SDL_RendererFlip flip /*= SDL_FLIP_NONE*/, float scale /*= 1*/) const
 {
 	Camera* camera = Global::GetMainCamera();
 	SDL_FPoint pos = camera->GetPos();
@@ -88,5 +88,5 @@ void Image::Draw(float _x, float _y, double angle, const SDL_FPoint* center, con
 
 	SDL_FRect dest = { (float)x, (float)y, view.w * scale, view.h * scale };
 	SDL_RenderCopyExF(renderer, texture, &view, &dest,
-		0.0, center, flip);
+		angle, _center, flip);
 }

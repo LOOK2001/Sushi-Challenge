@@ -4,7 +4,7 @@
 void SpriteObject::SetCount(const int count)
 {
 	frame_count = count;
-	view.w = GetWidth() / count;
+	view.w = GetImgWidth() / count;
 }
 
 void SpriteObject::sprite_update()

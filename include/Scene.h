@@ -96,20 +96,20 @@ public:
 		// Create 20 coins
 		for (int i = 0; i < 20; i++)
 		{
-			float pos_x = uniform_pos(e1);
-			float pos_y = uniform_pos(e1);
+			//float pos_x = uniform_pos(e1);
+			//float pos_y = uniform_pos(e1);
 
-			Pickup* coin = new Pickup(pos_x, pos_y, "./images/coinSprites.png");
-			coin->SetCount(6);
-			coin->SetDuration(100.0);
-			float width = coin->GetWidth();
-			float height = coin->GetHeight();
-			coin->SetBoxCollider(0.0, 0.0, width * 2, height * 2);
-			coin->SetCircleColliderCenter(width / 2, height / 2);
-			coin->SetCirlceColliderRadius(width / 2);
-			coin->init();
-			pickUps.push_back(coin);
-			objects_list.push_back(coin);
+			//Pickup* coin = new Pickup(pos_x, pos_y, "./images/coinSprites.png");
+			//coin->SetCount(6);
+			//coin->SetDuration(100.0);
+			//float width = coin->GetWidth();
+			//float height = coin->GetHeight();
+			//coin->SetBoxCollider(0.0, 0.0, width * 2, height * 2);
+			//coin->SetCircleColliderCenter(width / 2, height / 2);
+			//coin->SetCirlceColliderRadius(width / 2);
+			//coin->init();
+			//pickUps.push_back(coin);
+			//objects_list.push_back(coin);
 		}
 
 		// Create sprite animation for states of character

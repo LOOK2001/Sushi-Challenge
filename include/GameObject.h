@@ -8,6 +8,8 @@
 
 #include <SDL2/SDL.h>
 
+#include "Image.h"
+
 
 #define PI 3.14159265
 //#define DEBUG_COLLIDERS
@@ -62,6 +64,8 @@ public:
 	bool AddChild(GameObject* obj);
 	bool RemoveChild(GameObject* obj);
 
+	virtual SDL_FPoint GetGlobalPosition() const { return { 0.0, 0.0 }; }
+
 	// collision
 	virtual bool IsCollidable() const { return collidable; }
 	virtual bool IsCollideWith_Box(GameObject* dest) { return false; }
@@ -114,8 +118,8 @@ public:
 	virtual void RenderBoxCollider(SDL_Renderer* ren);
 	virtual void quit();
 
-	void SetPosition(const float x, const float y);
-	SDL_FPoint GetPosition() const;
+	virtual void SetPosition(const float x, const float y);
+	virtual SDL_FPoint GetPosition() const;
 
 	void setSize(const float _w, const float _h) { rect.w = _w, rect.h = _h; }
 	SDL_FRect GetSize() const { return rect; }
@@ -124,6 +128,8 @@ public:
 	float GetWidth() const { return rect.w; }
 	void SetHeight(const float h) { rect.h = h; }
 	float GetHeight() const { return rect.h; }
+
+	virtual SDL_FPoint GetGlobalPosition() const;
 
 	virtual void translate(const float x, const float y);
 	virtual void rotate(float angle, SDL_FPoint p);
@@ -138,6 +144,29 @@ protected:
 	SDL_FRect rect;
 };
 
+
+class TextureObject : public RectObject
+{
+public:
+	TextureObject(const char* name, float x, float y);
+	virtual ~TextureObject();
+		
+	virtual void init();
+	virtual void render(SDL_Renderer* ren);
+
+	virtual void SetAngle(const float _angle) { angle = _angle; }
+	virtual void SetCenter(const SDL_FPoint _center) { center = _center; }
+	virtual void SetFlip(const SDL_RendererFlip _filp) { flip = _filp; }
+
+	virtual int GetImgWidth() const { return img->GetImgWidth(); }
+	virtual int GetImgHeight() const { return img->GetImagHeight(); }
+
+protected:
+	Image* img;
+	float angle;
+	SDL_RendererFlip flip;
+	SDL_FPoint center;
+};
 
 
 // RectFillObject Declaration:

@@ -15,8 +15,8 @@ void TileSheet::LoadTileSet(const char* tile_name, const int _rows, const int _c
 	int total_tiles = rows * columns;
 	int x = 0, y = 0;
 
-	int tileSet_width = tileSet->GetWidth();
-	int tileSet_height = tileSet->GetHeight();
+	int tileSet_width = tileSet->GetImgWidth();
+	int tileSet_height = tileSet->GetImagHeight();
 
 	tile_width = tileSet_height / rows;
 	tile_height = tileSet_width / columns;

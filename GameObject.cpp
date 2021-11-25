@@ -12,6 +12,7 @@ bool GameObject::AddChild(GameObject* obj)
 	if (std::find(children.begin(), children.end(), obj) != children.end())
 		return false;
 
+	obj->parent = this;
 	children.push_back(obj);
 	return true;
 }
@@ -98,6 +99,19 @@ void RectObject::SetPosition(const float x, const float y)
 {
 	rect.x = x;
 	rect.y = y;
+}
+
+SDL_FPoint RectObject::GetGlobalPosition() const
+{
+	SDL_FPoint global_position = { 0.0, 0.0 };
+	SDL_FPoint p_pos = { 0.0, 0.0 };
+	SDL_FPoint s_pos = GetPosition();
+
+	if (parent)
+		p_pos = parent->GetGlobalPosition();
+
+	global_position = { p_pos.x + s_pos.x, p_pos.y + s_pos.y };
+	return global_position;
 }
 
 void RectObject::translate(const float x, const float y)
@@ -209,4 +223,39 @@ void RectFillObject::rotate(float angle, SDL_FPoint p)
 	float y = (rect.y - p.y) * cos(radian) + (rect.x - p.x) * sin(radian) + p.y;
 	rect.x = x;
 	rect.y = y;
+}
+
+TextureObject::TextureObject(const char* name, float x, float y)
+{
+	if (name)
+		img = new Image(name);
+
+	angle = 0.0f;
+	center = SDL_FPoint();
+
+	float width = (float)img->GetImgWidth();
+	float height = (float)img->GetImagHeight();
+	rect = { x, y, width, height };
+}
+
+TextureObject::~TextureObject()
+{
+	if (img)
+		delete img;
+}
+
+void TextureObject::init()
+{
+	GameObject::init();
+}
+
+void TextureObject::render(SDL_Renderer* ren)
+{
+	if (!active)
+		return;
+
+	SDL_FPoint pos = GetGlobalPosition();
+	img->Draw(pos.x, pos.y, angle, &center, flip);
+
+	RectObject::render(ren);
 }

@@ -1,6 +1,7 @@
 ﻿
 #include "include/Character.h"
 #include "include/Camera.h"
+#include "include/Utils.h"
 
 void Player::init()
 {
@@ -15,6 +16,13 @@ void Player::init()
 	}
 	draw_skin = false;
 	skin_color = { 0, 0, 0, 0 };
+
+	weapon = new Weapon("./images/gun.png", 50, 100);
+	weapon->init();
+	float weapon_center_x = weapon->GetImgWidth() / 2.0f;
+	float weapon_center_y = weapon->GetImgHeight() / 2.0f;
+	weapon->SetCenter({ weapon_center_x, weapon_center_y });
+	AddChild(weapon);
 }
 
 void Player::update()
@@ -76,6 +84,28 @@ void Player::handle_events(SDL_Event& ev)
 	{
 		key_pressed = false;
 		SwitchState("idle");
+	}
+	else if (ev.type == SDL_MOUSEMOTION || ev.type == SDL_MOUSEBUTTONDOWN || ev.type == SDL_MOUSEBUTTONUP)
+	{
+		// Get mouse position
+		int x, y;
+		SDL_GetMouseState(&x, &y);
+
+		// Direction to the mouse position from player
+		SDL_FPoint player_pos = GetGlobalPosition();
+		float center_x = Global::GetMainCamera()->GetWidth() / 2.0f;
+		float center_y = Global::GetMainCamera()->GetHeight() / 2.0f;
+		SDL_FPoint dir{ x - center_x, y - center_y };
+
+		// Normalize the direction
+		dir = Vector2D::normal(dir);
+		float radian = Vector2D::Angle(dir);
+		std::cout << radian << std::endl;
+		if (radian > PI * 0.5 || radian < -PI * 0.5)
+			weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_VERTICAL);
+		else
+			weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_NONE);
+		weapon->SetAngle(radian * 180/PI);
 	}
 
 	RectObject::handle_events(ev);
