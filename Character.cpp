@@ -17,12 +17,20 @@ void Player::init()
 	draw_skin = false;
 	skin_color = { 0, 0, 0, 0 };
 
+	// Weapon setup
 	weapon = new Weapon("./images/gun.png", 50, 100);
 	weapon->init();
 	float weapon_center_x = weapon->GetImgWidth() / 2.0f;
 	float weapon_center_y = weapon->GetImgHeight() / 2.0f;
+	weapon->SetMuzzlePosition({ (float)weapon->GetImgWidth()-20.0f, weapon_center_y-5.0f });
 	weapon->SetCenter({ weapon_center_x, weapon_center_y });
+	weapon->SetSpeed(8.0f);
 	AddChild(weapon);
+
+	// Camera effect setup
+	Camera* camera = Global::GetMainCamera();
+	camera->SetOcillationDuration(0.2);
+	camera->SetOcillationAmplitude(0.8);
 }
 
 void Player::update()
@@ -91,21 +99,23 @@ void Player::handle_events(SDL_Event& ev)
 		int x, y;
 		SDL_GetMouseState(&x, &y);
 
-		// Direction to the mouse position from player
-		SDL_FPoint player_pos = GetGlobalPosition();
-		float center_x = Global::GetMainCamera()->GetWidth() / 2.0f;
-		float center_y = Global::GetMainCamera()->GetHeight() / 2.0f;
-		SDL_FPoint dir{ x - center_x, y - center_y };
+		if (ev.type == SDL_MOUSEMOTION)
+		{
+			SDL_FPoint dir = GetDirectionToMouse(x, y);
 
-		// Normalize the direction
-		dir = Vector2D::normal(dir);
-		float radian = Vector2D::Angle(dir);
-		std::cout << radian << std::endl;
-		if (radian > PI * 0.5 || radian < -PI * 0.5)
-			weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_VERTICAL);
-		else
-			weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_NONE);
-		weapon->SetAngle(radian * 180/PI);
+			float radian = Vector2D::Angle(dir);
+			if (radian > PI * 0.5 || radian < -PI * 0.5)
+				weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_VERTICAL);
+			else
+				weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_NONE);
+			weapon->SetAngle(radian * 180 / PI);
+		}
+		else if (ev.type == SDL_MOUSEBUTTONDOWN)
+		{
+			SDL_FPoint dir = GetDirectionToMouse(x, y);
+			weapon->Fire(dir);
+			Global::GetMainCamera()->PlayCameraShake();
+		}
 	}
 
 	RectObject::handle_events(ev);
@@ -135,6 +145,19 @@ void Player::SwitchState(std::string _state)
 void Player::SetDefaultState(std::string _state)
 {
 	current_state = _state;
+}
+
+SDL_FPoint Player::GetDirectionToMouse(const int x, const int y) const
+{
+	// Direction to the mouse position from player
+	SDL_FPoint player_pos = GetGlobalPosition();
+	float center_x = Global::GetMainCamera()->GetWidth() / 2.0f;
+	float center_y = Global::GetMainCamera()->GetHeight() / 2.0f;
+	SDL_FPoint dir{ x - center_x, y - center_y };
+
+	// Normalize the direction
+	dir = Vector2D::normal(dir);
+	return dir;
 }
 
 void Player::CollisionResponse(GameObject* other)

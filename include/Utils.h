@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include "GameObject.h"
+#include "Scene.h"
 
 namespace Vector2D
 {
@@ -23,11 +24,31 @@ namespace Vector2D
 	{
 		return atan2(_vec.y, _vec.x);
 	}
+
+	static SDL_FPoint RotatePoint(const SDL_FPoint& point, const float& angle, const SDL_FPoint& center)
+	{
+		float radian = angle * PI / 180.f;
+		float x = (point.x - center.x) * cos(radian) - (point.y - center.y) * sin(radian) + center.x;
+		float y = (point.y - center.y) * cos(radian) + (point.x - center.x) * sin(radian) + center.y;
+		return { x, y };
+	}
 }
 
 static float Distance(SDL_FPoint p1, SDL_FPoint p2)
 {
 	return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+}
+
+static void DeleteObjet(GameObject* obj)
+{
+	Scene* s = Global::GetActiveScene();
+	s->RemoveGameObject(obj);
+}
+
+static void AddInstance(GameObject* obj)
+{
+	Scene* s = Global::GetActiveScene();
+	s->AddGameObject(obj);
 }
 
 #endif //UTILS_H

@@ -19,6 +19,7 @@ enum ObjectType
 	NONE,
 	PLAYER,
 	PICKUP,
+	BULLET
 };
 
 
@@ -155,8 +156,14 @@ public:
 	virtual void render(SDL_Renderer* ren);
 
 	virtual void SetAngle(const float _angle) { angle = _angle; }
+	virtual float GetAngle() const { return angle; }
+
 	virtual void SetCenter(const SDL_FPoint _center) { center = _center; }
+	virtual SDL_FPoint GetCenter() const { return center; }
+
 	virtual void SetFlip(const SDL_RendererFlip _filp) { flip = _filp; }
+	virtual SDL_RendererFlip GetFlip() const { return flip; }
+
 
 	virtual int GetImgWidth() const { return img->GetImgWidth(); }
 	virtual int GetImgHeight() const { return img->GetImagHeight(); }
@@ -191,11 +198,12 @@ public:
 
 	SDL_FPoint GetPosition() const;
 	void SetPosition(const float x, const float y);
+
 	void SetWidth(const float w) { rect.w = w; }
 	void SetHeight(const float h) { rect.h = h; }
 
 	void translate(const float x, const float y);
-	void rotate(float angle, SDL_FPoint p);
+	void rotate(float angle, SDL_FPoint _center);
 
 private:
 	SDL_Color color;

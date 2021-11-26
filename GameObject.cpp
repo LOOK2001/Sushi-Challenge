@@ -216,11 +216,11 @@ void RectFillObject::translate(const float x, const float y)
 	rect.y += y;
 }
 
-void RectFillObject::rotate(float angle, SDL_FPoint p)
+void RectFillObject::rotate(float angle, SDL_FPoint _c)
 {
 	float radian = angle * PI / 180.f;
-	float x = (rect.x - p.x) * cos(radian) - (rect.y - p.y) * sin(radian) + p.x;
-	float y = (rect.y - p.y) * cos(radian) + (rect.x - p.x) * sin(radian) + p.y;
+	float x = (rect.x - _c.x) * cos(radian) - (rect.y - _c.y) * sin(radian) + _c.x;
+	float y = (rect.y - _c.y) * cos(radian) + (rect.x - _c.x) * sin(radian) + _c.y;
 	rect.x = x;
 	rect.y = y;
 }
@@ -246,7 +246,7 @@ TextureObject::~TextureObject()
 
 void TextureObject::init()
 {
-	GameObject::init();
+	RectObject::init();
 }
 
 void TextureObject::render(SDL_Renderer* ren)

@@ -26,28 +26,33 @@ public:
 			delete obj;
 	}
 	virtual void init() {
-		for (GameObject* obj : objects_list)
-			obj->init();
+		for (int i = 0; i < objects_list.size(); i++) {
+			objects_list[i]->init();
+		}
 	}
 
 	virtual void handle_events(SDL_Event& ev){
-		for (GameObject* obj : objects_list)
-			obj->handle_events(ev);
+		for (int i = 0; i < objects_list.size(); i++){
+			objects_list[i]->handle_events(ev);
+		}
 	}
 
 	virtual void update(){
-		for (GameObject* obj : objects_list)
-			obj->update();
+		for (int i = 0; i < objects_list.size(); i++){
+			objects_list[i]->update();
+		}
 	}
 
 	virtual void render(SDL_Renderer* ren){
-		for (GameObject* obj : objects_list)
-			obj->render(ren);
+		for (int i = 0; i < objects_list.size(); i++) {
+			objects_list[i]->render(ren);
+		}
 	}
 
 	virtual void quit(){
-		for (GameObject* obj : objects_list)
-			obj->quit();
+		for (int i = 0; i < objects_list.size(); i++) {
+			objects_list[i]->quit();
+		}
 	}
 
 	virtual void AddGameObject(GameObject* _obj) { objects_list.push_back(_obj); }
@@ -71,7 +76,9 @@ public:
 
 		// Create gameObjects for homework3
 		camera = new Camera(0.0f, 0.0f, right, bottom);
+		camera->init();
 		Global::GetInstance()->SetMainCamera(camera);
+		objects_list.push_back(camera);
 
 		// The background map
 		map = new Map();
@@ -94,22 +101,22 @@ public:
 		std::uniform_real_distribution<float> uniform_pos(0, 1500);
 
 		// Create 20 coins
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 5; i++)
 		{
-			//float pos_x = uniform_pos(e1);
-			//float pos_y = uniform_pos(e1);
+			float pos_x = uniform_pos(e1);
+			float pos_y = uniform_pos(e1);
 
-			//Pickup* coin = new Pickup(pos_x, pos_y, "./images/coinSprites.png");
-			//coin->SetCount(6);
-			//coin->SetDuration(100.0);
-			//float width = coin->GetWidth();
-			//float height = coin->GetHeight();
-			//coin->SetBoxCollider(0.0, 0.0, width * 2, height * 2);
-			//coin->SetCircleColliderCenter(width / 2, height / 2);
-			//coin->SetCirlceColliderRadius(width / 2);
-			//coin->init();
-			//pickUps.push_back(coin);
-			//objects_list.push_back(coin);
+			Pickup* coin = new Pickup(pos_x, pos_y, "./images/coinSprites.png");
+			coin->SetCount(6);
+			coin->SetDuration(100.0);
+			float width = coin->GetWidth();
+			float height = coin->GetHeight();
+			coin->SetBoxCollider(0.0, 0.0, width * 2, height * 2);
+			coin->SetCircleColliderCenter(width / 2, height / 2);
+			coin->SetCirlceColliderRadius(width / 2);
+			coin->init();
+			pickUps.push_back(coin);
+			objects_list.push_back(coin);
 		}
 
 		// Create sprite animation for states of character

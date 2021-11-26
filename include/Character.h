@@ -50,6 +50,8 @@ public:
 	void SwitchState(std::string _state);
 	void SetDefaultState(std::string _state);
 
+	SDL_FPoint GetDirectionToMouse(const int x, const int y) const;
+
 	// collision
 	virtual void CollisionResponse(GameObject* other);
 
