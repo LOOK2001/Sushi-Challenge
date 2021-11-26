@@ -22,9 +22,13 @@ Finally, the sushi chef need to defeat the Evil Sushi boss and collect a amount 
 - [ ] 2D assets:
   - [ ] Tilesets
   - [ ] Sprite Animation
-- [ ] Player controller:
-  - [ ] wasd move around
-  - [ ] Fire bullets towards mouse pointer position with mouse click
+- [x] Player controller:
+  - [x] wasd move around
+  - [x] Fire bullets towards mouse pointer position with mouse click
+- [ ] Camera effect:
+
+  - [x] Camera shake
+  - [ ] Smooth camera follow
 - [ ] Enemies
 - [ ] Evil Sushi Boss
 
