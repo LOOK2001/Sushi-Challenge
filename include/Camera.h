@@ -23,6 +23,7 @@ public:
 
 	virtual void init();
 	virtual void update();
+	virtual void lateUpdate();
 
 	bool IsInsideView(const float x, const float y) const
 	{
@@ -38,6 +39,7 @@ public:
 	}
 
 	void SetPos(float x, float y) { camera_rect.x = x, camera_rect.y = y; }
+	void SetPos(const SDL_FPoint& _pos) { camera_rect.x = _pos.x, camera_rect.y= _pos.y; }
 	SDL_FPoint GetPos() const { return SDL_FPoint{ camera_rect.x, camera_rect.y }; } 
 
 	void Translate(float _x, float _y) { camera_rect.x += _x, camera_rect.y += _y; }
@@ -49,7 +51,14 @@ public:
 	float GetHeight() const { return camera_rect.h; }
 
 	void SetViewOffset(float _offset) { offset = _offset; }
+	float GetViewOffset() const { return offset; }
 
+	void SetTarget(GameObject* _target) { target = _target; }
+	GameObject* GetTarget() const { return target; }
+
+	void SetTargetOffset(const SDL_FPoint& offset) { target_offset = offset; }
+	SDL_FPoint GetTargetOffset() { return target_offset; }
+	
 	// Camera Shake
 	void PlayCameraShake();
 	float GetoOcillationDuration() const { return oscillation_duration; }
@@ -58,6 +67,9 @@ public:
 	void SetOcillationAmplitude(const float& _amplitude) { oscillation_amplitude = _amplitude; }
 	
 private:
+	GameObject* target;
+	SDL_FPoint target_offset;
+	float smooth_speed;
 	SDL_FRect camera_rect;
 	int start_time;
 	int current_time;

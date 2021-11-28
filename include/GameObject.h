@@ -36,24 +36,28 @@ public:
 		collidable = false;
 		type = ObjectType::NONE;
 
-		for (auto child : children)
-			child->init();
+		for (int i = 0; i < children.size(); i++)
+			children[i]->init();
 	}
 	virtual void update(){
-		for (auto child : children)
-			child->update();
+		for (int i = 0; i < children.size(); i++)
+			children[i]->update();
+	}
+	virtual void lateUpdate() {
+		for (int i = 0; i < children.size(); i++)
+			children[i]->lateUpdate();
 	}
 	virtual void handle_events(SDL_Event& ev){
-		for (auto child : children)
-			child->handle_events(ev);
+		for (int i = 0; i < children.size(); i++)
+			children[i]->handle_events(ev);
 	}
 	virtual void render(SDL_Renderer* ren){
-		for (auto child : children)
-			child->render(ren);
+		for (int i = 0; i < children.size(); i++)
+			children[i]->render(ren);
 	}
 	virtual void quit(){
-		for (auto child : children)
-			child->quit();
+		for (int i = 0; i < children.size(); i++)
+			children[i]->quit();
 	}
 
 	virtual ObjectType GetType() const { return type; }

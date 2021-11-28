@@ -32,6 +32,11 @@ namespace Vector2D
 		float y = (point.y - center.y) * cos(radian) + (point.x - center.x) * sin(radian) + center.y;
 		return { x, y };
 	}
+
+	static SDL_FPoint Lerp(SDL_FPoint a, SDL_FPoint b, float t)
+	{
+		return { (1 - t) * a.x + t * b.x, (1 - t) * a.y + t * b.y };
+	}
 }
 
 static float Distance(SDL_FPoint p1, SDL_FPoint p2)

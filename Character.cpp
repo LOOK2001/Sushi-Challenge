@@ -29,8 +29,8 @@ void Player::init()
 
 	// Camera effect setup
 	Camera* camera = Global::GetMainCamera();
-	camera->SetOcillationDuration(0.2);
-	camera->SetOcillationAmplitude(0.8);
+	camera->SetOcillationDuration(0.2f);
+	camera->SetOcillationAmplitude(1.0f);
 }
 
 void Player::update()

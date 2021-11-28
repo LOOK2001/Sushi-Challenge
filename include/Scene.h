@@ -43,6 +43,12 @@ public:
 		}
 	}
 
+	virtual void lateUpdate() {	
+		for (int i = 0; i < objects_list.size(); i++) {
+			objects_list[i]->lateUpdate();
+		}
+	}
+
 	virtual void render(SDL_Renderer* ren){
 		for (int i = 0; i < objects_list.size(); i++) {
 			objects_list[i]->render(ren);
@@ -77,6 +83,7 @@ public:
 		// Create gameObjects for homework3
 		camera = new Camera(0.0f, 0.0f, right, bottom);
 		camera->init();
+		camera->SetTargetOffset({ 100.0f, 100.0f });
 		Global::GetInstance()->SetMainCamera(camera);
 		objects_list.push_back(camera);
 
@@ -133,6 +140,7 @@ public:
 		player->SetCircleColliderCenter(view_width / 2, view_height / 2);
 		player->SetCirlceColliderRadius(view_width / 2);
 		player->init();
+		camera->SetTarget(player);
 		objects_list.push_back(player);
 	}
 
@@ -160,13 +168,13 @@ public:
 	{
 		handle_collisions();
 
-		// Camera follow the player
-		SDL_FPoint pos = player->GetPosition();
-		float w = camera->GetWidth() / 2;
-		float h = camera->GetHeight() / 2;
+		//// Camera follow the player
+		//SDL_FPoint pos = player->GetPosition();
+		//float w = camera->GetWidth() / 2;
+		//float h = camera->GetHeight() / 2;
 
-		// Move camera on top of character
-		camera->SetPos(pos.x - w + 100, pos.y - h + 100);
+		//// Move camera on top of character
+		//camera->SetPos(pos.x - w + 100, pos.y - h + 100);
 
 		Scene::update();
 	}

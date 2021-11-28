@@ -17,6 +17,29 @@ enum CtrlMode
 };
 
 
+class Character : public RectObject
+{
+public:
+	Character(float x, float y, float w, float h, unsigned count, double duration, const char* imageName = nullptr)
+	{
+		key_pressed = false;
+		SetPosition(x, y);
+		setSize(w, h);
+		velocity_x = 0.0f;
+		velocity_x = 0.f;
+		flip_sprite = SDL_FLIP_NONE;
+	}
+
+private:
+	bool key_pressed;
+	float velocity_x;
+	float velocity_y;
+	SDL_RendererFlip flip_sprite;
+	std::map<std::string, SpriteObject*> state;
+	std::string current_state;
+};
+
+
 // Player Declaration:
 // Base class for movable character
 class Player : public RectObject
@@ -51,6 +74,12 @@ public:
 	void SetDefaultState(std::string _state);
 
 	SDL_FPoint GetDirectionToMouse(const int x, const int y) const;
+
+	// UI interface
+	int GetRiceScore() {}
+	int GetCarrotScore() {}
+	int GetSushiScore() {}
+	int GetHealth() {}
 
 	// collision
 	virtual void CollisionResponse(GameObject* other);

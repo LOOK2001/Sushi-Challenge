@@ -90,6 +90,7 @@ void Application::handle_events()
 void Application::update_mechanics()
 {
 	current_scene->update();
+	current_scene->lateUpdate();
 }
 
 void Application::redner()
