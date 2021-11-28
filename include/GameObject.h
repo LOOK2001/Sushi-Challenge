@@ -28,7 +28,9 @@ enum ObjectType
 class GameObject 
 {
 public:
-	GameObject() {}
+	GameObject() :
+	parent(nullptr)
+	{}
 	virtual ~GameObject() {}
 
 	virtual void init(){
