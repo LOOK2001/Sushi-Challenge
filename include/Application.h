@@ -10,6 +10,7 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "Scene.h"
+#include "TextHandler.h"
 
 class Application
 {
@@ -35,6 +36,7 @@ public:
 
 private:
 	bool is_running;
+	bool is_paused;
 	SDL_Window* my_window;
 	SDL_Renderer* my_renderer;
 
@@ -49,6 +51,9 @@ private:
 	SDL_Rect rect;
 
 	Scene* current_scene;
+
+	TextHandler* pause_menu;
+	SDL_Rect pause_rect;
 };
 
 #endif //APPLICATION_H

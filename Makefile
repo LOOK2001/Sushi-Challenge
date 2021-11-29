@@ -4,13 +4,13 @@
 CC = g++
 
 # set the compiler flags
-CFLAGS = `sdl2-config --libs --cflags` -ggdb3 -O0 -Wall -lSDL2_image -lm
+CFLAGS = `sdl2-config --libs --cflags` -ggdb3 -O0 -Wall -lSDL2_image -lSDL2_ttf -lm
 
 # add header files here
 HDRS =
 
 # add source files here
-SRCS = main.cpp Global.cpp GameObject.cpp Image.cpp Character.cpp Application.cpp TileHandler.cpp Sprite.cpp Map.cpp Pickup.cpp Particle.cpp ParticleEmitter.cpp Weapon.cpp Camera.cpp
+SRCS = main.cpp Global.cpp GameObject.cpp Image.cpp Character.cpp Application.cpp TileHandler.cpp Sprite.cpp Map.cpp Pickup.cpp Particle.cpp ParticleEmitter.cpp Weapon.cpp Camera.cpp TextHandler.cpp
 
 # generate names of object files
 OBJS = $(SRCS:.cpp=.o)

@@ -5,9 +5,11 @@
 Application::Application(const std::string& name /*= "CPSC-6041"*/)
 {
 	is_running = false;
+	is_paused = false;
 	my_window = nullptr;
 	my_renderer = nullptr;
 	my_texture = nullptr;
+	pause_menu = nullptr;
 
 	fps = 60;
 	frame_duration = 1000 / fps;
@@ -53,6 +55,16 @@ void Application::init()
 
 	SDL_SetRenderDrawBlendMode(my_renderer, SDL_BLENDMODE_BLEND);
 
+	//Create Pause Text
+	pause_menu = new TextHandler();
+	SDL_Color pause_color = {0,0,0};
+	pause_menu->text_init(my_renderer, "./images/fonts/cookiemilkFont.ttf", (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), pause_color, 96);
+	pause_menu->text_update("Paused");
+	pause_rect.x = SCREEN_WIDTH/2;
+	pause_rect.y = SCREEN_HEIGHT/2;
+	pause_rect.w = 100;
+	pause_rect.h = 32;
+
 	current_scene->init();
 }
 
@@ -81,22 +93,36 @@ void Application::handle_events()
 			case SDLK_q:
 				is_running = false;
 				break;
+			case SDLK_SPACE:
+				if(is_paused) {
+					is_paused = false;
+				}
+				else {
+					is_paused = true;
+				}
 			}
 		}
-		current_scene->handle_events(ev);
+		if(!is_paused) {
+			current_scene->handle_events(ev);
+		}
 	}
 }
 
 void Application::update_mechanics()
 {
-	current_scene->update();
-	current_scene->lateUpdate();
+	if(!is_paused) {
+		current_scene->update();
+		current_scene->lateUpdate();
+	}
 }
 
 void Application::redner()
 {
 	current_scene->render(my_renderer);
-
+	if(is_paused){
+		//render pause menu
+		pause_menu->text_render(pause_rect);
+	}
 	SDL_RenderPresent(my_renderer);
 }
 
