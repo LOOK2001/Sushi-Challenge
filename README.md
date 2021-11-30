@@ -10,8 +10,19 @@ Finally, the sushi chef need to defeat the Evil Sushi boss and collect a amount 
 
 ![sushiChief](images/examples/rules.png)
 
+**********
+Directions:
+**********
+W- Up
+A- Left
+S- Down
+D- Right
 
-- [ ] **AI:** 
+Left-click- Shoot Gun
+**********
+SPACEBAR- Pause
+
+- [ ] **AI:**
   - [ ] **finite state machine (like patrol, chase, attack) reference: https://learn.unity.com/tutorial/pluggable-ai-with-scriptable-objects#5c7f8528edbc2a002053b48a**
   - [ ]  **(A*) if we have time**
 - [ ] **Start/Finish screens:**
