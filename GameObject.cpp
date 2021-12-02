@@ -31,6 +31,7 @@ bool GameObject::RemoveChild(GameObject* obj)
 void RectObject::init()
 {
 	GameObject::init();
+	SetBoxCollider({0.0, 0.0, rect.w, rect.h});
 	collidable = true;
 }
 
@@ -178,7 +179,7 @@ bool RectObject::IsCollideWith_Sphere(GameObject* dest)
 	SDL_FPoint center_d = dest->GetCircleColliderCenter();
 	float radius_d = dest->GetCirlceColliderRadius();
 
-	float distance = Distance(center_r, center_d);
+	float distance = Vector2D::Distance(center_r, center_d);
 
 	if (distance > (radius_r + radius_d))
 		return false;
@@ -186,11 +187,19 @@ bool RectObject::IsCollideWith_Sphere(GameObject* dest)
 	return true;
 }
 
+void RectFillObject::init()
+{
+	RectObject::init();
+}
+
 // RectFillObject Implementation:
 void RectFillObject::render(SDL_Renderer* ren)
 {
 	if (!active)
 		return;
+
+	SDL_FPoint pos = GetGlobalPosition();
+	SDL_FRect tmp_rect = { pos.x, pos.y, rect.w, rect.h };
 
 	SDL_SetRenderDrawColor(ren, color.r, color.g, color.b, color.a);
 	SDL_RenderFillRectF(ren, &rect);

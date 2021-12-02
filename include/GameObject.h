@@ -19,7 +19,8 @@ enum ObjectType
 	NONE,
 	PLAYER,
 	PICKUP,
-	BULLET
+	BULLET,
+	ENEMY_BULLET
 };
 
 
@@ -170,7 +171,6 @@ public:
 	virtual void SetFlip(const SDL_RendererFlip _filp) { flip = _filp; }
 	virtual SDL_RendererFlip GetFlip() const { return flip; }
 
-
 	virtual int GetImgWidth() const { return img->GetImgWidth(); }
 	virtual int GetImgHeight() const { return img->GetImagHeight(); }
 
@@ -196,6 +196,7 @@ public:
 	}
 	virtual ~RectFillObject() {}
 
+	virtual void init();
 	virtual void render(SDL_Renderer* ren);
 
 	SDL_Color getColor() const { return color; }
