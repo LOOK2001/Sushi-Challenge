@@ -11,7 +11,7 @@ namespace Vector2D
 		return sqrt(_vec.x * _vec.x + _vec.y * _vec.y);
 	}
 
-	static SDL_FPoint normal(const SDL_FPoint& _vec)
+	static SDL_FPoint Normal(const SDL_FPoint& _vec)
 	{
 		float len = Length(_vec);
 		SDL_FPoint norm;
@@ -37,11 +37,11 @@ namespace Vector2D
 	{
 		return { (1 - t) * a.x + t * b.x, (1 - t) * a.y + t * b.y };
 	}
-}
 
-static float Distance(SDL_FPoint p1, SDL_FPoint p2)
-{
-	return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+	static float Distance(SDL_FPoint p1, SDL_FPoint p2)
+	{
+		return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+	}
 }
 
 static void DeleteObjet(GameObject* obj)

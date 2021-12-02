@@ -9,3 +9,5 @@ int Global::SCREEN_WIDTH = 640;
 int Global::SCREEN_HEIGHT = 480;
 Camera* Global::main_camera = nullptr;
 Scene* Global::active_scene = nullptr;
+Map* Global::active_map = nullptr;
+Player* Global::main_player = nullptr;

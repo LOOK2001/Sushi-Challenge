@@ -12,6 +12,10 @@ public:
 	virtual void init();
 	virtual void update();
 	virtual void handle_events(SDL_Event& ev) {}
+	virtual void render(SDL_Renderer* ren)
+	{
+		TextureObject::render(ren);
+	}
 
 	void SetSpeed(const float& _speed) { speed = _speed; }
 	float GetSpped() const { return speed; }

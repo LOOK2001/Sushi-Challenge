@@ -6,12 +6,13 @@
 #include <algorithm>
 #include <random>
 
-#include "Character.h"
+#include "Player.h"
 #include "Sprite.h"
 #include "Map.h"
 #include "Camera.h"
 #include "Pickup.h"
 #include "ParticleEmitter.h"
+#include "Enemy.h"
 
 
 class Global;
@@ -97,6 +98,7 @@ public:
 		map->SetScaleFactor(1.5);
 		map->init();
 		objects_list.push_back(map);
+		Global::SetActiveMap(map);
 
 		TileSheet* sh = map->GetTileSheet();
 		float offset = (float)sh->GetTileWidth();
@@ -114,6 +116,7 @@ public:
 			float pos_y = uniform_pos(e1);
 
 			Pickup* coin = new Pickup(pos_x, pos_y, "./images/coinSprites.png");
+			coin->init();
 			coin->SetCount(6);
 			coin->SetDuration(100.0);
 			float width = coin->GetWidth();
@@ -121,7 +124,6 @@ public:
 			coin->SetBoxCollider(0.0, 0.0, width * 2, height * 2);
 			coin->SetCircleColliderCenter(width / 2, height / 2);
 			coin->SetCirlceColliderRadius(width / 2);
-			coin->init();
 			pickUps.push_back(coin);
 			objects_list.push_back(coin);
 		}
@@ -130,18 +132,29 @@ public:
 		SpriteObject* walk_state = new SpriteObject(6, 100, "./images/DinoSprites_walk.png");
 		SpriteObject* idle_state = new SpriteObject(4, 100, "./images/DinoSprites_idle.png");
 
-		player = new Player(right * 0.5f, bottom * 0.5f, 256, 256, 6, 100, "./images/DinoSprites_walk.png");
+		player = new Player(right * 0.5f, bottom * 0.5f);
 		player->SetDefaultState("idle");
 		player->AddState(walk_state, "walk");
 		player->AddState(idle_state, "idle");
 		float view_width = (float)walk_state->GetViewWidth();
 		float view_height = (float)walk_state->GetViewHeight();
+		player->init();
 		player->SetBoxCollider(view_width / 4, view_height / 2, view_width / 2, 80);
 		player->SetCircleColliderCenter(view_width / 2, view_height / 2);
 		player->SetCirlceColliderRadius(view_width / 2);
-		player->init();
+		Global::SetMainPlayer(player);
 		camera->SetTarget(player);
 		objects_list.push_back(player);
+
+		// Enemy
+		SpriteObject* default_state = new SpriteObject(1, 100, "./images/Sushi.png");
+		SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/Sushi_hurt.png");
+		boss = new SushiBoss(100, 100);
+		boss->AddState(default_state, "idle");
+		boss->AddState(hurt_state, "hurt");
+		boss->SetDefaultState("idle");
+		boss->init();
+		objects_list.push_back(boss);
 	}
 
 	virtual void handle_events(SDL_Event& ev)
@@ -230,6 +243,7 @@ private:
 	Camera* camera;
 	ParticleEmitter* pe;
 	bool use_sphere_collider;
+	SushiBoss* boss;
 };
 
 #endif // SCENE_H

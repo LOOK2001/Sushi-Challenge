@@ -17,50 +17,76 @@ enum CtrlMode
 };
 
 
-class Character : public RectObject
+class HealthBar : public RectFillObject
 {
 public:
-	Character(float x, float y, float w, float h, unsigned count, double duration, const char* imageName = nullptr)
+	HealthBar(float x, float y, float w, float h)
 	{
-		key_pressed = false;
 		SetPosition(x, y);
-		setSize(w, h);
-		velocity_x = 0.0f;
-		velocity_x = 0.f;
-		flip_sprite = SDL_FLIP_NONE;
+		SetWidth(w);
+		SetHeight(h);
+		precentage = 0.0;
+		back = front = nullptr;
+	}
+	virtual ~HealthBar()
+	{
+		if (back)
+			delete back;
+		if (front)
+			delete front;
 	}
 
+	virtual void init();
+	virtual void render(SDL_Renderer* ren);
+
+	SDL_Color GetBackColor() const { return back->getColor(); }
+	SDL_Color GetFrontColor() const { return front->getColor(); }
+	void SetBackColor(const SDL_Color& _color) { back->setColor(_color); }
+	void SetFrontColor(const SDL_Color& _color) { front->setColor(_color); }
+
+	void SetPrecentage(const float& _p);
+	float GetPrecentage() const { return precentage; }
+
 private:
-	bool key_pressed;
-	float velocity_x;
-	float velocity_y;
-	SDL_RendererFlip flip_sprite;
-	std::map<std::string, SpriteObject*> state;
-	std::string current_state;
+	RectFillObject* back;
+	RectFillObject* front;
+	float precentage;
 };
 
 
-// Player Declaration:
-// Base class for movable character
-class Player : public RectObject
+class Character : public RectObject
 {
 public:
-	Player(float x, float y, float w, float h, unsigned count, double duration, const char* imageName = nullptr)
+	Character(float x, float y, const char* imageName = nullptr)
 	{
 		key_pressed = false;
 		SetPosition(x, y);
-		setSize(w, h);
 		velocity_x = 0.0f;
 		velocity_x = 0.f;
 		flip_sprite = SDL_FLIP_NONE;
+		current_state = "none";
+		speed = 10.0f;
+		health = 0;
 	}
-
-	virtual ~Player() {}
+	virtual ~Character() {}
 
 	virtual void init();
 	virtual void update();
 	virtual void render(SDL_Renderer* ren);
 	virtual void handle_events(SDL_Event& ev);
+	virtual void quit()
+	{
+		std::map<std::string, SpriteObject*>::iterator  it;
+		for (it = state.begin(); it != state.end(); it++)
+		{
+			delete it->second;
+		}
+		RectObject::quit();
+	}
+
+	virtual void AddState(SpriteObject* sprite_anim, std::string _state);
+	virtual void SwitchState(std::string _state);
+	virtual void SetDefaultState(std::string _state);
 
 	void set_vel(const float x, const float y)
 	{
@@ -69,31 +95,21 @@ public:
 	};
 	void get_vel() {};
 
-	void AddState(SpriteObject* sprite_anim, std::string _state);
-	void SwitchState(std::string _state);
-	void SetDefaultState(std::string _state);
+	virtual void SetSpeed(const float& _speed) { speed = _speed; }
+	virtual float GetSpeed() const { return speed; }
 
-	SDL_FPoint GetDirectionToMouse(const int x, const int y) const;
+	virtual void SetHealth(const int& _health) { health = _health; }
+	virtual int GetHealth() { return health; }
 
-	// UI interface
-	int GetRiceScore() {}
-	int GetCarrotScore() {}
-	int GetSushiScore() {}
-	int GetHealth() {}
-
-	// collision
-	virtual void CollisionResponse(GameObject* other);
-
-private:
+protected:
 	bool key_pressed;
 	float velocity_x;
 	float velocity_y;
 	SDL_RendererFlip flip_sprite;
 	std::map<std::string, SpriteObject*> state;
 	std::string current_state;
-	bool draw_skin;
-	SDL_Color skin_color;
-	Weapon* weapon;
+	float speed;
+	int health;
 };
 
 #endif // CHARACTER_H
