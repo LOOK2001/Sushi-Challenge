@@ -11,6 +11,8 @@ Application::Application(const std::string& name /*= "CPSC-6041"*/)
 	my_texture = nullptr;
 	pause_menu = nullptr;
 
+	is_game_over = 1;
+
 	fps = 60;
 	frame_duration = 1000 / fps;
 
@@ -65,6 +67,44 @@ void Application::init()
 	pause_rect.w = 100;
 	pause_rect.h = 32;
 
+	//Set is_game_over to 1 for title display upon initialization
+	is_game_over = 1;
+
+	menu_background.x = 0;
+	menu_background.y = 0;
+	menu_background.w = Global::GetWindowWidth();
+	menu_background.h = Global::GetWindowHeight();
+
+	//Create Title
+	title_menu = new TextHandler();
+	SDL_Color title_color = {65, 105, 225};
+	title_menu->text_init(my_renderer, "./images/fonts/cookiemilkFont.ttf", (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), title_color, 48);
+	title_menu->text_update("Sushi Challenge");
+	title_rect.x = SCREEN_WIDTH/2;
+	title_rect.y = SCREEN_HEIGHT/2;
+	title_rect.w = 100;
+	title_rect.h = 32;
+
+	//Create Title
+	subtitle_menu = new TextHandler();
+	SDL_Color subtitle_color = {65, 105, 225};
+	subtitle_menu->text_init(my_renderer, "./images/fonts/cookiemilkFont.ttf", (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2) + 48, subtitle_color, 12);
+	subtitle_menu->text_update("Press any key to start");
+	subtitle_rect.x = SCREEN_WIDTH/2;
+	subtitle_rect.y = SCREEN_HEIGHT/2;
+	subtitle_rect.w = 100;
+	subtitle_rect.h = 32;
+
+	//Create Game Over
+	gameover_menu = new TextHandler();
+	SDL_Color gameover_color = {178, 34, 34};
+	gameover_menu->text_init(my_renderer, "./images/fonts/cookiemilkFont.ttf", (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), gameover_color, 96);
+	gameover_menu->text_update("Game Over");
+	gameover_rect.x = SCREEN_WIDTH/2;
+	gameover_rect.y = SCREEN_HEIGHT/2;
+	gameover_rect.w = 100;
+	gameover_rect.h = 32;
+
 	current_scene->init();
 }
 
@@ -87,19 +127,25 @@ void Application::handle_events()
 			is_running = false;
 		else if (ev.type == SDL_KEYDOWN)
 		{
-			switch (ev.key.keysym.sym)
+			if(is_game_over == 0)
 			{
-			case SDLK_ESCAPE:
-			case SDLK_q:
-				is_running = false;
-				break;
-			case SDLK_SPACE:
-				if(is_paused) {
-					is_paused = false;
+				switch (ev.key.keysym.sym)
+				{
+				case SDLK_ESCAPE:
+				case SDLK_q:
+					is_running = false;
+					break;
+				case SDLK_SPACE:
+					if(is_paused) {
+						is_paused = false;
+					}
+					else{
+						is_paused = true;
+					}
 				}
-				else {
-					is_paused = true;
-				}
+			}
+			else if(is_game_over == 1){
+				is_game_over = 0;
 			}
 		}
 		if(!is_paused) {
@@ -110,7 +156,12 @@ void Application::handle_events()
 
 void Application::update_mechanics()
 {
-	if(!is_paused) {
+	if(Global::GetMainPlayer()->GetIsDead() == true)
+	{
+		is_game_over = 2;
+	}
+	if(!is_paused && is_game_over == 0) {
+		std::cout << "updating" << std::endl;
 		current_scene->update();
 		current_scene->lateUpdate();
 	}
@@ -118,10 +169,26 @@ void Application::update_mechanics()
 
 void Application::redner()
 {
-	current_scene->render(my_renderer);
-	if(is_paused){
-		//render pause menu
-		pause_menu->text_render(pause_rect);
+	if(is_game_over == 1)
+	{
+		SDL_SetRenderDrawColor(my_renderer, 0, 0, 0, 255);
+		SDL_RenderFillRect(my_renderer, &menu_background);
+		title_menu->text_render(title_rect);
+		subtitle_menu->text_render(subtitle_rect);
+	}
+	else if(is_game_over == 2)
+	{
+		SDL_SetRenderDrawColor(my_renderer, 0, 0, 0, 255);
+		SDL_RenderFillRect(my_renderer, &menu_background);
+		gameover_menu->text_render(gameover_rect);
+	}
+	else
+	{
+		current_scene->render(my_renderer);
+		if(is_paused){
+			//render pause menu
+			pause_menu->text_render(pause_rect);
+		}
 	}
 	SDL_RenderPresent(my_renderer);
 }
@@ -154,4 +221,9 @@ void Application::quit()
 
 	IMG_Quit();
 	SDL_Quit();
+}
+
+void Application::set_is_game_over(int go)
+{
+	is_game_over = go;
 }
