@@ -89,7 +89,7 @@ void Application::init()
 	subtitle_menu = new TextHandler();
 	SDL_Color subtitle_color = {65, 105, 225};
 	subtitle_menu->text_init(my_renderer, "./images/fonts/cookiemilkFont.ttf", (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2) + 48, subtitle_color, 12);
-	subtitle_menu->text_update("Press any key to start");
+	subtitle_menu->text_update("Press any key to continue");
 	subtitle_rect.x = SCREEN_WIDTH/2;
 	subtitle_rect.y = SCREEN_HEIGHT/2;
 	subtitle_rect.w = 100;
@@ -147,6 +147,12 @@ void Application::handle_events()
 			else if(is_game_over == 1){
 				is_game_over = 0;
 			}
+			else if(is_game_over == 2){
+				is_game_over = 1;
+				current_scene = new ExampleScene();
+				Global::SetActiveScene(current_scene);
+				current_scene->init();
+			}
 		}
 		if(!is_paused) {
 			current_scene->handle_events(ev);
@@ -161,7 +167,6 @@ void Application::update_mechanics()
 		is_game_over = 2;
 	}
 	if(!is_paused && is_game_over == 0) {
-		std::cout << "updating" << std::endl;
 		current_scene->update();
 		current_scene->lateUpdate();
 	}
@@ -181,6 +186,7 @@ void Application::redner()
 		SDL_SetRenderDrawColor(my_renderer, 0, 0, 0, 255);
 		SDL_RenderFillRect(my_renderer, &menu_background);
 		gameover_menu->text_render(gameover_rect);
+		subtitle_menu->text_render(subtitle_rect);
 	}
 	else
 	{
@@ -221,9 +227,4 @@ void Application::quit()
 
 	IMG_Quit();
 	SDL_Quit();
-}
-
-void Application::set_is_game_over(int go)
-{
-	is_game_over = go;
 }

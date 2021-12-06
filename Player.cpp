@@ -155,6 +155,5 @@ void Player::CollisionResponse(GameObject* other)
 
 void Player::Died()
 {
-	std::cout << "Died" << std::endl;
 	is_dead = true;
 }
