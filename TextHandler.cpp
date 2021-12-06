@@ -59,6 +59,5 @@ void TextHandler::text_update(const char* charString)
 
 void TextHandler::text_render(SDL_Rect pause_rect)
 {
-    std::cout << "Rect...X: " << text_rect.x << " Y: " << text_rect.y << " W: " << text_rect.w << " H: " << text_rect.h << std::endl; 
     SDL_RenderCopy(text_renderer, text_texture, NULL, &text_rect);
 }

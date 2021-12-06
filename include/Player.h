@@ -40,6 +40,7 @@ public:
 	int GetRiceScore() { return 0; }
 	int GetCarrotScore() { return 0; }
 	int GetSushiScore() { return 0; }
+	bool GetIsDead() {return is_dead;}
 
 	// collision
 	virtual void CollisionResponse(GameObject* other);
@@ -49,6 +50,7 @@ private:
 
 private:
 	int full_health;
+	bool is_dead;
 	Weapon* weapon;
 	HealthBar* health_bar;
 };
