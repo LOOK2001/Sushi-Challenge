@@ -30,7 +30,7 @@ void Player::init()
 	// Camera effect setup
 	Camera* camera = Global::GetMainCamera();
 	camera->SetOcillationDuration(0.2f);
-	camera->SetOcillationAmplitude(1.0f);
+	camera->SetOcillationAmplitude(3.5f);
 
 	health_bar = new HealthBar(0, 0, GetWidth(), 20);
 	AddChild(health_bar);
@@ -136,18 +136,39 @@ void Player::UpdateHealthBar(int _health)
 
 void Player::CollisionResponse(GameObject* other)
 {
-	if (other->GetType() == ObjectType::ENEMY_BULLET)
+	if (other->GetType() == ObjectType::ENEMY_BULLET || other->GetType() == ObjectType::BLAST)
 	{
 		
 		if (health <= 0)
 		{
+			UpdateHealthBar(0);
 			Died();
 		}
 		else
 		{
-			health -= 20;
-			UpdateHealthBar(health);
-			DeleteObjet(other);
+			if (other->GetType() == ObjectType::ENEMY_BULLET)
+			{
+				health -= 20;
+				if (health <= 0)
+				{
+					UpdateHealthBar(0);
+					Died();
+				}
+				UpdateHealthBar(health);
+				other->SetCollidable(false);
+				DeleteObject(other);
+			}
+			else if (other->GetType() == ObjectType::BLAST)
+			{
+				health -= 40;
+				if (health <= 0)
+				{
+					UpdateHealthBar(0);
+					Died();
+				}
+				other->SetCollidable(false);
+				UpdateHealthBar(health);
+			}
 		}
 	}
 }
