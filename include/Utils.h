@@ -44,7 +44,7 @@ namespace Vector2D
 	}
 }
 
-static void DeleteObjet(GameObject* obj)
+static void DeleteObject(GameObject* obj)
 {
 	Scene* s = Global::GetActiveScene();
 	s->RemoveGameObject(obj);

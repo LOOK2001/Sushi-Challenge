@@ -27,37 +27,37 @@ public:
 			delete obj;
 	}
 	virtual void init() {
-		for (int i = 0; i < objects_list.size(); i++) {
+		for (auto i = 0; i < objects_list.size(); i++) {
 			objects_list[i]->init();
 		}
 	}
 
 	virtual void handle_events(SDL_Event& ev){
-		for (int i = 0; i < objects_list.size(); i++){
+		for (auto i = 0; i < objects_list.size(); i++){
 			objects_list[i]->handle_events(ev);
 		}
 	}
 
 	virtual void update(){
-		for (int i = 0; i < objects_list.size(); i++){
+		for (auto i = 0; i < objects_list.size(); i++){
 			objects_list[i]->update();
 		}
 	}
 
 	virtual void lateUpdate() {	
-		for (int i = 0; i < objects_list.size(); i++) {
+		for (auto i = 0; i < objects_list.size(); i++) {
 			objects_list[i]->lateUpdate();
 		}
 	}
 
 	virtual void render(SDL_Renderer* ren){
-		for (int i = 0; i < objects_list.size(); i++) {
+		for (auto i = 0; i < objects_list.size(); i++) {
 			objects_list[i]->render(ren);
 		}
 	}
 
 	virtual void quit(){
-		for (int i = 0; i < objects_list.size(); i++) {
+		for (auto i = 0; i < objects_list.size(); i++) {
 			objects_list[i]->quit();
 		}
 	}
@@ -109,24 +109,24 @@ public:
 		std::default_random_engine e1(r());
 		std::uniform_real_distribution<float> uniform_pos(0, 1500);
 
-		// Create 20 coins
-		for (int i = 0; i < 5; i++)
-		{
-			float pos_x = uniform_pos(e1);
-			float pos_y = uniform_pos(e1);
+		//// Create 20 coins
+		//for (auto i = 0; i < 5; i++)
+		//{
+		//	float pos_x = uniform_pos(e1);
+		//	float pos_y = uniform_pos(e1);
 
-			Pickup* coin = new Pickup(pos_x, pos_y, "./images/coinSprites.png");
-			coin->init();
-			coin->SetCount(6);
-			coin->SetDuration(100.0);
-			float width = coin->GetWidth();
-			float height = coin->GetHeight();
-			coin->SetBoxCollider(0.0, 0.0, width * 2, height * 2);
-			coin->SetCircleColliderCenter(width / 2, height / 2);
-			coin->SetCirlceColliderRadius(width / 2);
-			pickUps.push_back(coin);
-			objects_list.push_back(coin);
-		}
+		//	Pickup* coin = new Pickup(pos_x, pos_y, "./images/coinSprites.png");
+		//	coin->init();
+		//	coin->SetCount(6);
+		//	coin->SetDuration(100.0);
+		//	float width = coin->GetWidth();
+		//	float height = coin->GetHeight();
+		//	coin->SetBoxCollider(0.0, 0.0, width * 2, height * 2);
+		//	coin->SetCircleColliderCenter(width / 2, height / 2);
+		//	coin->SetCirlceColliderRadius(width / 2);
+		//	pickUps.push_back(coin);
+		//	objects_list.push_back(coin);
+		//}
 
 		// Create sprite animation for states of character
 		SpriteObject* walk_state = new SpriteObject(6, 100, "./images/DinoSprites_walk.png");
@@ -147,8 +147,24 @@ public:
 		objects_list.push_back(player);
 
 		// Enemy
-		SpriteObject* default_state = new SpriteObject(1, 100, "./images/Sushi.png");
-		SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/Sushi_hurt.png");
+		for (auto i = 0; i < 1; i++)
+		{
+			float pos_x = uniform_pos(e1);
+			float pos_y = uniform_pos(e1);
+
+			SpriteObject* default_state = new SpriteObject(1, 100, "./images/carrot.png");
+			SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/carrot_hurt.png");
+			Enemy* enemy = new Enemy(800, 800);
+			enemy->AddState(default_state, "idle");
+			enemy->AddState(hurt_state, "hurt");
+			enemy->SetDefaultState("idle");
+			enemy->init();
+			enemy_list.push_back(enemy);
+			objects_list.push_back(enemy);
+		}
+
+		SpriteObject* default_state = new SpriteObject(1, 100, "./images/sushi.png");
+		SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/sushi_hurt.png");
 		boss = new SushiBoss(100, 100);
 		boss->AddState(default_state, "idle");
 		boss->AddState(hurt_state, "hurt");
@@ -243,6 +259,7 @@ private:
 	Camera* camera;
 	ParticleEmitter* pe;
 	bool use_sphere_collider;
+	std::vector<Enemy*> enemy_list;
 	SushiBoss* boss;
 };
 

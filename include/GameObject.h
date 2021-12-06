@@ -20,7 +20,8 @@ enum ObjectType
 	PLAYER,
 	PICKUP,
 	BULLET,
-	ENEMY_BULLET
+	ENEMY_BULLET,
+	BLAST
 };
 
 
@@ -39,27 +40,27 @@ public:
 		collidable = false;
 		type = ObjectType::NONE;
 
-		for (int i = 0; i < children.size(); i++)
+		for (auto i = 0; i < children.size(); i++)
 			children[i]->init();
 	}
 	virtual void update(){
-		for (int i = 0; i < children.size(); i++)
+		for (auto i = 0; i < children.size(); i++)
 			children[i]->update();
 	}
 	virtual void lateUpdate() {
-		for (int i = 0; i < children.size(); i++)
+		for (auto i = 0; i < children.size(); i++)
 			children[i]->lateUpdate();
 	}
 	virtual void handle_events(SDL_Event& ev){
-		for (int i = 0; i < children.size(); i++)
+		for (auto i = 0; i < children.size(); i++)
 			children[i]->handle_events(ev);
 	}
 	virtual void render(SDL_Renderer* ren){
-		for (int i = 0; i < children.size(); i++)
+		for (auto i = 0; i < children.size(); i++)
 			children[i]->render(ren);
 	}
 	virtual void quit(){
-		for (int i = 0; i < children.size(); i++)
+		for (auto i = 0; i < children.size(); i++)
 			children[i]->quit();
 	}
 
@@ -75,6 +76,7 @@ public:
 	virtual SDL_FPoint GetGlobalPosition() const { return { 0.0, 0.0 }; }
 
 	// collision
+	virtual void SetCollidable(const bool _c) { collidable = _c; }
 	virtual bool IsCollidable() const { return collidable; }
 	virtual bool IsCollideWith_Box(GameObject* dest) { return false; }
 	virtual bool IsCollideWith_Sphere(GameObject* dest) { return false; }

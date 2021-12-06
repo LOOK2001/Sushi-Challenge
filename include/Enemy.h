@@ -4,16 +4,16 @@
 #include "Character.h"
 #include "Weapon.h"
 
-class SushiBoss : public Character
+class Enemy : public Character
 {
 public:
-	SushiBoss(float x, float y, const char* imageName = nullptr) :
-		Character(x, y, imageName)
+	Enemy(float x, float y) : 
+		Character(x, y)
 	{
 		srand(35);
 		velocity_x = velocity_y = 1.0f;
 		player = nullptr;
-		range = 200.0f;
+		range = 500.0f;
 		start_time = 0;
 		last_time = 0;
 		decayrate = 0.95f;
@@ -29,15 +29,8 @@ public:
 	// collision
 	virtual void CollisionResponse(GameObject* other);
 
-	void FindPlayer()
-	{
-		// Initialize the open and closed list
-		std::vector<int> open_list;
-		std::vector<int> closed_list;
-	}
-
 private:
-	void Decay(SDL_Renderer* ren);
+	virtual void Decay(SDL_Renderer* ren);
 
 protected:
 	float range;
@@ -46,6 +39,38 @@ protected:
 	int last_time;
 	float decayrate;
 	float hit_color[4];
+};
+
+class SushiBoss : public Enemy
+{
+public:
+	SushiBoss(float x, float y) :
+		Enemy(x, y)
+	{
+		srand(35);
+		velocity_x = velocity_y = 1.0f;
+		player = nullptr;
+		range = 1000.0f;
+		start_time = 0;
+		last_time = 0;
+		decayrate = 0.95f;
+		hit_color[0] = hit_color[1] = hit_color[2] = hit_color[3] = 0.0f;
+	}
+
+	virtual void update();
+
+	// collision
+	virtual void CollisionResponse(GameObject* other);
+
+	void FindPlayer()
+	{
+		// Initialize the open and closed list
+		std::vector<int> open_list;
+		std::vector<int> closed_list;
+	}
+
+private:
+	virtual void Decay(SDL_Renderer* ren);
 };
 
 #endif
