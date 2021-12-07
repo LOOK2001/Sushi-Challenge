@@ -27,37 +27,37 @@ public:
 			delete obj;
 	}
 	virtual void init() {
-		for (auto i = 0; i < objects_list.size(); i++) {
+		for (size_t i = 0; i < objects_list.size(); i++) {
 			objects_list[i]->init();
 		}
 	}
 
 	virtual void handle_events(SDL_Event& ev){
-		for (auto i = 0; i < objects_list.size(); i++){
+		for (size_t i = 0; i < objects_list.size(); i++){
 			objects_list[i]->handle_events(ev);
 		}
 	}
 
 	virtual void update(){
-		for (auto i = 0; i < objects_list.size(); i++){
+		for (size_t i = 0; i < objects_list.size(); i++){
 			objects_list[i]->update();
 		}
 	}
 
 	virtual void lateUpdate() {
-		for (auto i = 0; i < objects_list.size(); i++) {
+		for (size_t i = 0; i < objects_list.size(); i++) {
 			objects_list[i]->lateUpdate();
 		}
 	}
 
 	virtual void render(SDL_Renderer* ren){
-		for (auto i = 0; i < objects_list.size(); i++) {
+		for (size_t i = 0; i < objects_list.size(); i++) {
 			objects_list[i]->render(ren);
 		}
 	}
 
 	virtual void quit(){
-		for (auto i = 0; i < objects_list.size(); i++) {
+		for (size_t i = 0; i < objects_list.size(); i++) {
 			objects_list[i]->quit();
 		}
 	}
@@ -149,8 +149,8 @@ public:
 		// Enemy
 		for (auto i = 0; i < 1; i++)
 		{
-			float pos_x = uniform_pos(e1);
-			float pos_y = uniform_pos(e1);
+			//float pos_x = uniform_pos(e1);
+			//float pos_y = uniform_pos(e1);
 
 			SpriteObject* default_state = new SpriteObject(1, 100, "./images/carrot.png");
 			SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/carrot_hurt.png");

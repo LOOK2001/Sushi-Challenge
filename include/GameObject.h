@@ -3,6 +3,7 @@
 #define GAMEOBJECT_H
 
 #include <iostream>
+#include <stdlib.h>
 #include <math.h>
 #include <vector>
 
@@ -40,27 +41,27 @@ public:
 		collidable = false;
 		type = ObjectType::NONE;
 
-		for (auto i = 0; i < children.size(); i++)
+		for (size_t i = 0; i < children.size(); i++)
 			children[i]->init();
 	}
 	virtual void update(){
-		for (auto i = 0; i < children.size(); i++)
+		for (size_t i = 0; i < children.size(); i++)
 			children[i]->update();
 	}
 	virtual void lateUpdate() {
-		for (auto i = 0; i < children.size(); i++)
+		for (size_t i = 0; i < children.size(); i++)
 			children[i]->lateUpdate();
 	}
 	virtual void handle_events(SDL_Event& ev){
-		for (auto i = 0; i < children.size(); i++)
+		for (size_t i = 0; i < children.size(); i++)
 			children[i]->handle_events(ev);
 	}
 	virtual void render(SDL_Renderer* ren){
-		for (auto i = 0; i < children.size(); i++)
+		for (size_t i = 0; i < children.size(); i++)
 			children[i]->render(ren);
 	}
 	virtual void quit(){
-		for (auto i = 0; i < children.size(); i++)
+		for (size_t i = 0; i < children.size(); i++)
 			children[i]->quit();
 	}
 

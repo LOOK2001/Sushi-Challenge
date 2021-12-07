@@ -6,12 +6,12 @@
 
 namespace Vector2D
 {
-	static float Length(const SDL_FPoint& _vec)
+	static inline float Length(const SDL_FPoint& _vec)
 	{
 		return sqrt(_vec.x * _vec.x + _vec.y * _vec.y);
 	}
 
-	static SDL_FPoint Normal(const SDL_FPoint& _vec)
+	static inline SDL_FPoint Normal(const SDL_FPoint& _vec)
 	{
 		float len = Length(_vec);
 		SDL_FPoint norm;
@@ -20,12 +20,12 @@ namespace Vector2D
 		return norm;
 	}
 
-	static float Angle(const SDL_FPoint& _vec)
+	static inline float Angle(const SDL_FPoint& _vec)
 	{
 		return atan2(_vec.y, _vec.x);
 	}
 
-	static SDL_FPoint RotatePoint(const SDL_FPoint& point, const float& angle, const SDL_FPoint& center)
+	static inline SDL_FPoint RotatePoint(const SDL_FPoint& point, const float& angle, const SDL_FPoint& center)
 	{
 		float radian = angle * PI / 180.f;
 		float x = (point.x - center.x) * cos(radian) - (point.y - center.y) * sin(radian) + center.x;
@@ -33,24 +33,24 @@ namespace Vector2D
 		return { x, y };
 	}
 
-	static SDL_FPoint Lerp(SDL_FPoint a, SDL_FPoint b, float t)
+	static inline SDL_FPoint Lerp(SDL_FPoint a, SDL_FPoint b, float t)
 	{
 		return { (1 - t) * a.x + t * b.x, (1 - t) * a.y + t * b.y };
 	}
 
-	static float Distance(SDL_FPoint p1, SDL_FPoint p2)
+	static inline float Distance(SDL_FPoint p1, SDL_FPoint p2)
 	{
 		return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
 	}
 }
 
-static void DeleteObject(GameObject* obj)
+static inline void DeleteObject(GameObject* obj)
 {
 	Scene* s = Global::GetActiveScene();
 	s->RemoveGameObject(obj);
 }
 
-static void AddInstance(GameObject* obj)
+static inline void AddInstance(GameObject* obj)
 {
 	Scene* s = Global::GetActiveScene();
 	s->AddGameObject(obj);

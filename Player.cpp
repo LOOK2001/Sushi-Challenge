@@ -119,7 +119,6 @@ void Player::handle_events(SDL_Event& ev)
 SDL_FPoint Player::GetDirectionToMouse(const int x, const int y) const
 {
 	// Direction to the mouse position from player
-	SDL_FPoint player_pos = GetGlobalPosition();
 	float center_x = Global::GetMainCamera()->GetWidth() / 2.0f;
 	float center_y = Global::GetMainCamera()->GetHeight() / 2.0f;
 	SDL_FPoint dir{ x - center_x, y - center_y };
@@ -139,7 +138,7 @@ void Player::CollisionResponse(GameObject* other)
 {
 	if (other->GetType() == ObjectType::ENEMY_BULLET || other->GetType() == ObjectType::BLAST)
 	{
-		
+
 		if (health <= 0)
 		{
 			UpdateHealthBar(0);
