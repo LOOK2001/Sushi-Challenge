@@ -19,7 +19,9 @@ enum ObjectType
 	NONE,
 	PLAYER,
 	PICKUP,
-	BULLET
+	BULLET,
+	ENEMY_BULLET,
+	BLAST
 };
 
 
@@ -38,24 +40,28 @@ public:
 		collidable = false;
 		type = ObjectType::NONE;
 
-		for (auto child : children)
-			child->init();
+		for (auto i = 0; i < children.size(); i++)
+			children[i]->init();
 	}
 	virtual void update(){
-		for (auto child : children)
-			child->update();
+		for (auto i = 0; i < children.size(); i++)
+			children[i]->update();
+	}
+	virtual void lateUpdate() {
+		for (auto i = 0; i < children.size(); i++)
+			children[i]->lateUpdate();
 	}
 	virtual void handle_events(SDL_Event& ev){
-		for (auto child : children)
-			child->handle_events(ev);
+		for (auto i = 0; i < children.size(); i++)
+			children[i]->handle_events(ev);
 	}
 	virtual void render(SDL_Renderer* ren){
-		for (auto child : children)
-			child->render(ren);
+		for (auto i = 0; i < children.size(); i++)
+			children[i]->render(ren);
 	}
 	virtual void quit(){
-		for (auto child : children)
-			child->quit();
+		for (auto i = 0; i < children.size(); i++)
+			children[i]->quit();
 	}
 
 	virtual ObjectType GetType() const { return type; }
@@ -70,6 +76,7 @@ public:
 	virtual SDL_FPoint GetGlobalPosition() const { return { 0.0, 0.0 }; }
 
 	// collision
+	virtual void SetCollidable(const bool _c) { collidable = _c; }
 	virtual bool IsCollidable() const { return collidable; }
 	virtual bool IsCollideWith_Box(GameObject* dest) { return false; }
 	virtual bool IsCollideWith_Sphere(GameObject* dest) { return false; }
@@ -166,7 +173,6 @@ public:
 	virtual void SetFlip(const SDL_RendererFlip _filp) { flip = _filp; }
 	virtual SDL_RendererFlip GetFlip() const { return flip; }
 
-
 	virtual int GetImgWidth() const { return img->GetImgWidth(); }
 	virtual int GetImgHeight() const { return img->GetImagHeight(); }
 
@@ -192,6 +198,7 @@ public:
 	}
 	virtual ~RectFillObject() {}
 
+	virtual void init();
 	virtual void render(SDL_Renderer* ren);
 
 	SDL_Color getColor() const { return color; }

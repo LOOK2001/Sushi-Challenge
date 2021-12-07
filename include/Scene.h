@@ -6,12 +6,13 @@
 #include <algorithm>
 #include <random>
 
-#include "Character.h"
+#include "Player.h"
 #include "Sprite.h"
 #include "Map.h"
 #include "Camera.h"
 #include "Pickup.h"
 #include "ParticleEmitter.h"
+#include "Enemy.h"
 
 
 class Global;
@@ -26,31 +27,37 @@ public:
 			delete obj;
 	}
 	virtual void init() {
-		for (int i = 0; i < objects_list.size(); i++) {
+		for (auto i = 0; i < objects_list.size(); i++) {
 			objects_list[i]->init();
 		}
 	}
 
 	virtual void handle_events(SDL_Event& ev){
-		for (int i = 0; i < objects_list.size(); i++){
+		for (auto i = 0; i < objects_list.size(); i++){
 			objects_list[i]->handle_events(ev);
 		}
 	}
 
 	virtual void update(){
-		for (int i = 0; i < objects_list.size(); i++){
+		for (auto i = 0; i < objects_list.size(); i++){
 			objects_list[i]->update();
 		}
 	}
 
+	virtual void lateUpdate() {	
+		for (auto i = 0; i < objects_list.size(); i++) {
+			objects_list[i]->lateUpdate();
+		}
+	}
+
 	virtual void render(SDL_Renderer* ren){
-		for (int i = 0; i < objects_list.size(); i++) {
+		for (auto i = 0; i < objects_list.size(); i++) {
 			objects_list[i]->render(ren);
 		}
 	}
 
 	virtual void quit(){
-		for (int i = 0; i < objects_list.size(); i++) {
+		for (auto i = 0; i < objects_list.size(); i++) {
 			objects_list[i]->quit();
 		}
 	}
@@ -77,6 +84,7 @@ public:
 		// Create gameObjects for homework3
 		camera = new Camera(0.0f, 0.0f, right, bottom);
 		camera->init();
+		camera->SetTargetOffset({ 100.0f, 100.0f });
 		Global::GetInstance()->SetMainCamera(camera);
 		objects_list.push_back(camera);
 
@@ -90,6 +98,7 @@ public:
 		map->SetScaleFactor(1.5);
 		map->init();
 		objects_list.push_back(map);
+		Global::SetActiveMap(map);
 
 		TileSheet* sh = map->GetTileSheet();
 		float offset = (float)sh->GetTileWidth();
@@ -100,40 +109,68 @@ public:
 		std::default_random_engine e1(r());
 		std::uniform_real_distribution<float> uniform_pos(0, 1500);
 
-		// Create 20 coins
-		for (int i = 0; i < 5; i++)
-		{
-			float pos_x = uniform_pos(e1);
-			float pos_y = uniform_pos(e1);
+		//// Create 20 coins
+		//for (auto i = 0; i < 5; i++)
+		//{
+		//	float pos_x = uniform_pos(e1);
+		//	float pos_y = uniform_pos(e1);
 
-			Pickup* coin = new Pickup(pos_x, pos_y, "./images/coinSprites.png");
-			coin->SetCount(6);
-			coin->SetDuration(100.0);
-			float width = coin->GetWidth();
-			float height = coin->GetHeight();
-			coin->SetBoxCollider(0.0, 0.0, width * 2, height * 2);
-			coin->SetCircleColliderCenter(width / 2, height / 2);
-			coin->SetCirlceColliderRadius(width / 2);
-			coin->init();
-			pickUps.push_back(coin);
-			objects_list.push_back(coin);
-		}
+		//	Pickup* coin = new Pickup(pos_x, pos_y, "./images/coinSprites.png");
+		//	coin->init();
+		//	coin->SetCount(6);
+		//	coin->SetDuration(100.0);
+		//	float width = coin->GetWidth();
+		//	float height = coin->GetHeight();
+		//	coin->SetBoxCollider(0.0, 0.0, width * 2, height * 2);
+		//	coin->SetCircleColliderCenter(width / 2, height / 2);
+		//	coin->SetCirlceColliderRadius(width / 2);
+		//	pickUps.push_back(coin);
+		//	objects_list.push_back(coin);
+		//}
 
 		// Create sprite animation for states of character
 		SpriteObject* walk_state = new SpriteObject(6, 100, "./images/DinoSprites_walk.png");
 		SpriteObject* idle_state = new SpriteObject(4, 100, "./images/DinoSprites_idle.png");
 
-		player = new Player(right * 0.5f, bottom * 0.5f, 256, 256, 6, 100, "./images/DinoSprites_walk.png");
+		player = new Player(right * 0.5f, bottom * 0.5f);
 		player->SetDefaultState("idle");
 		player->AddState(walk_state, "walk");
 		player->AddState(idle_state, "idle");
 		float view_width = (float)walk_state->GetViewWidth();
 		float view_height = (float)walk_state->GetViewHeight();
+		player->init();
 		player->SetBoxCollider(view_width / 4, view_height / 2, view_width / 2, 80);
 		player->SetCircleColliderCenter(view_width / 2, view_height / 2);
 		player->SetCirlceColliderRadius(view_width / 2);
-		player->init();
+		Global::SetMainPlayer(player);
+		camera->SetTarget(player);
 		objects_list.push_back(player);
+
+		// Enemy
+		for (auto i = 0; i < 1; i++)
+		{
+			float pos_x = uniform_pos(e1);
+			float pos_y = uniform_pos(e1);
+
+			SpriteObject* default_state = new SpriteObject(1, 100, "./images/carrot.png");
+			SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/carrot_hurt.png");
+			Enemy* enemy = new Enemy(800, 800);
+			enemy->AddState(default_state, "idle");
+			enemy->AddState(hurt_state, "hurt");
+			enemy->SetDefaultState("idle");
+			enemy->init();
+			enemy_list.push_back(enemy);
+			objects_list.push_back(enemy);
+		}
+
+		SpriteObject* default_state = new SpriteObject(1, 100, "./images/sushi.png");
+		SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/sushi_hurt.png");
+		boss = new SushiBoss(100, 100);
+		boss->AddState(default_state, "idle");
+		boss->AddState(hurt_state, "hurt");
+		boss->SetDefaultState("idle");
+		boss->init();
+		objects_list.push_back(boss);
 	}
 
 	virtual void handle_events(SDL_Event& ev)
@@ -160,13 +197,13 @@ public:
 	{
 		handle_collisions();
 
-		// Camera follow the player
-		SDL_FPoint pos = player->GetPosition();
-		float w = camera->GetWidth() / 2;
-		float h = camera->GetHeight() / 2;
+		//// Camera follow the player
+		//SDL_FPoint pos = player->GetPosition();
+		//float w = camera->GetWidth() / 2;
+		//float h = camera->GetHeight() / 2;
 
-		// Move camera on top of character
-		camera->SetPos(pos.x - w + 100, pos.y - h + 100);
+		//// Move camera on top of character
+		//camera->SetPos(pos.x - w + 100, pos.y - h + 100);
 
 		Scene::update();
 	}
@@ -222,6 +259,8 @@ private:
 	Camera* camera;
 	ParticleEmitter* pe;
 	bool use_sphere_collider;
+	std::vector<Enemy*> enemy_list;
+	SushiBoss* boss;
 };
 
 #endif // SCENE_H

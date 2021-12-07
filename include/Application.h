@@ -10,6 +10,7 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "Scene.h"
+#include "TextHandler.h"
 
 class Application
 {
@@ -33,8 +34,14 @@ public:
 
 	void quit();
 
+	void set_is_game_over(int go);
+
 private:
 	bool is_running;
+	bool is_paused;
+
+	//0 = normal; 1 = title; 2 = game over
+	int is_game_over;
 	SDL_Window* my_window;
 	SDL_Renderer* my_renderer;
 
@@ -49,6 +56,20 @@ private:
 	SDL_Rect rect;
 
 	Scene* current_scene;
+
+	TextHandler* pause_menu;
+	SDL_Rect pause_rect;
+
+	SDL_Rect menu_background;
+
+	TextHandler* title_menu;
+	SDL_Rect title_rect;
+
+	TextHandler* subtitle_menu;
+	SDL_Rect subtitle_rect;
+
+	TextHandler* gameover_menu;
+	SDL_Rect gameover_rect;
 };
 
 #endif //APPLICATION_H

@@ -11,6 +11,8 @@
 
 class Camera;
 class Scene;
+class Map;
+class Player;
 
 // Global class hold global setting, such as renderer and window
 class Global
@@ -40,6 +42,12 @@ public:
 
 	static Scene* GetActiveScene() { return active_scene; }
 	static void SetActiveScene(Scene* _scene) { active_scene = _scene; }
+
+	static Map* GetActiveMap() { return active_map; }
+	static void SetActiveMap(Map* _map) { active_map = _map; }
+
+	static Player* GetMainPlayer() { return main_player; }
+	static void SetMainPlayer(Player* _player) { main_player = _player; }
 	
 private:
 	Global()
@@ -53,6 +61,8 @@ private:
 	static int SCREEN_HEIGHT;
 	static Camera* main_camera;
 	static Scene* active_scene;
+	static Map* active_map;
+	static Player* main_player;
 };
 
 #endif // GLOBAL_H

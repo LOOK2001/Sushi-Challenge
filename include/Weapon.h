@@ -12,17 +12,36 @@ public:
 	virtual void init();
 	virtual void update();
 	virtual void handle_events(SDL_Event& ev) {}
+	virtual void render(SDL_Renderer* ren)
+	{
+		TextureObject::render(ren);
+	}
 
-	void SetSpeed(const float& _speed) { speed = _speed; }
-	float GetSpped() const { return speed; }
+	virtual void SetSpeed(const float& _speed) { speed = _speed; }
+	virtual float GetSpped() const { return speed; }
 
-	void SetDirection(const SDL_FPoint& _dir) { direction = _dir; }
-	SDL_FPoint GetDirection() const { return direction; }
+	virtual void SetDirection(const SDL_FPoint& _dir) { direction = _dir; }
+	virtual SDL_FPoint GetDirection() const { return direction; }
 
-private:
+	virtual void SetLiftime(const int& _time) { life_time = _time; }
+	virtual int GetLifttime() const { return life_time; }
+
+protected:
 	float speed;
 	SDL_FPoint direction;
+	int life_time;
 };
+
+
+class Bomb : public Bullet
+{
+public:
+	Bomb(const char* name, float x, float y);
+
+	virtual void init();
+	virtual void update();
+};
+
 
 class Weapon : public TextureObject
 {
