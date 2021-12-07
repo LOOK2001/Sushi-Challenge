@@ -25,10 +25,12 @@ enum ObjectType
 
 // GameObject Declaration:
 // Base class for everything displayed on the screen
-class GameObject 
+class GameObject
 {
 public:
-	GameObject() {}
+	GameObject() :
+	parent(nullptr)
+	{}
 	virtual ~GameObject() {}
 
 	virtual void init(){
@@ -151,7 +153,7 @@ class TextureObject : public RectObject
 public:
 	TextureObject(const char* name, float x, float y);
 	virtual ~TextureObject();
-		
+
 	virtual void init();
 	virtual void render(SDL_Renderer* ren);
 
