@@ -149,6 +149,7 @@ void Application::handle_events()
 			}
 			else if(is_game_over == 2){
 				is_game_over = 1;
+				is_paused = false;
 				current_scene = new ExampleScene();
 				Global::SetActiveScene(current_scene);
 				current_scene->init();
@@ -165,6 +166,7 @@ void Application::update_mechanics()
 	if(Global::GetMainPlayer()->GetIsDead() == true)
 	{
 		is_game_over = 2;
+		is_paused = true;
 	}
 	if(!is_paused && is_game_over == 0) {
 		current_scene->update();
@@ -183,7 +185,8 @@ void Application::redner()
 	}
 	else if(is_game_over == 2)
 	{
-		SDL_SetRenderDrawColor(my_renderer, 0, 0, 0, 255);
+		current_scene->render(my_renderer);
+		SDL_SetRenderDrawColor(my_renderer, 0, 0, 0, 125);
 		SDL_RenderFillRect(my_renderer, &menu_background);
 		gameover_menu->text_render(gameover_rect);
 		subtitle_menu->text_render(subtitle_rect);
