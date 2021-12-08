@@ -28,27 +28,27 @@ public:
 	Global(Global const&) = delete;
 	void operator=(Global const&) = delete;
 
-	static SDL_Renderer* GetRenderer() { return my_renderer; }
-	static void SetRenderer(SDL_Renderer* renderer) { my_renderer = renderer; }
+	static inline SDL_Renderer* GetRenderer() { return my_renderer; }
+	static inline void SetRenderer(SDL_Renderer* renderer) { my_renderer = renderer; }
 
-	static SDL_Window* GetWindow() { return my_window; }
-	static void SetWindow(SDL_Window* window) { my_window = window; }
+	static inline SDL_Window* GetWindow() { return my_window; }
+	static inline void SetWindow(SDL_Window* window) { my_window = window; }
 
-	static const int GetWindowWidth() { return SCREEN_WIDTH; }
-	static const int GetWindowHeight() { return SCREEN_HEIGHT; }
+	static inline const int GetWindowWidth() { return SCREEN_WIDTH; }
+	static inline const int GetWindowHeight() { return SCREEN_HEIGHT; }
 
-	static void SetMainCamera(Camera* _cam) { main_camera = _cam; }
-	static Camera* GetMainCamera() { return main_camera; }
+	static inline void SetMainCamera(Camera* _cam) { main_camera = _cam; }
+	static inline Camera* GetMainCamera() { return main_camera; }
 
-	static Scene* GetActiveScene() { return active_scene; }
-	static void SetActiveScene(Scene* _scene) { active_scene = _scene; }
+	static inline Scene* GetActiveScene() { return active_scene; }
+	static inline void SetActiveScene(Scene* _scene) { active_scene = _scene; }
 
-	static Map* GetActiveMap() { return active_map; }
-	static void SetActiveMap(Map* _map) { active_map = _map; }
+	static inline Map* GetActiveMap() { return active_map; }
+	static inline void SetActiveMap(Map* _map) { active_map = _map; }
 
-	static Player* GetMainPlayer() { return main_player; }
-	static void SetMainPlayer(Player* _player) { main_player = _player; }
-	
+	static inline Player* GetMainPlayer() { return main_player; }
+	static inline void SetMainPlayer(Player* _player) { main_player = _player; }
+
 private:
 	Global()
 	{

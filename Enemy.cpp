@@ -94,7 +94,7 @@ void Enemy::CollisionResponse(GameObject* other)
 			DeleteObject(this);
 		}
 
-		Scene* active_scene = Global::GetActiveScene();
+		//Scene* active_scene = Global::GetActiveScene();
 		SetHitColor(255, 255, 255, 255);
 
 		health -= 100;
@@ -139,9 +139,6 @@ void Enemy::Decay(SDL_Renderer* ren)
 
 void SushiBoss::update()
 {
-	float pos_x = rect.x + rect.w * 0.5;
-	float pos_y = rect.y + rect.h * 0.5;
-
 	// Check if the player close enough
 	if (player)
 	{
@@ -182,9 +179,9 @@ void SushiBoss::CollisionResponse(GameObject* other)
 			DeleteObject(this);
 		}
 
-		Scene* active_scene = Global::GetActiveScene();
+		//Scene* active_scene = Global::GetActiveScene();
 		SetHitColor(255, 255, 255, 255);
-		
+
 		health -= 10;
 		DeleteObject(other);
 	}

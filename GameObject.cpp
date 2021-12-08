@@ -198,8 +198,8 @@ void RectFillObject::render(SDL_Renderer* ren)
 	if (!active)
 		return;
 
-	SDL_FPoint pos = GetGlobalPosition();
-	SDL_FRect tmp_rect = { pos.x, pos.y, rect.w, rect.h };
+	//SDL_FPoint pos = GetGlobalPosition();
+	//SDL_FRect tmp_rect = { pos.x, pos.y, rect.w, rect.h };
 
 	SDL_SetRenderDrawColor(ren, color.r, color.g, color.b, color.a);
 	SDL_RenderFillRectF(ren, &rect);
