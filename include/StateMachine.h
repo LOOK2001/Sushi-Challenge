@@ -2,118 +2,111 @@
 #define STATEMACHINE_H
 
 #include <vector>
+#include <unordered_map>
+#include <functional>
+#include <memory>
 #include <iostream>
 
 #include <SDL2/SDL_timer.h>
 
 
 
-class StateController;
-class Action
-{
-public:
-	virtual void Act(StateController* controller) {};
-};
-
-class Transition;
-class StateController;
+class StateMachine;
 class State
 {
 public:
-	void UpdateState(StateController* controller)
+	void UpdateState(StateMachine* controller)
 	{
 		DoActions(controller);
 		CheckTransitions(controller);
 	}
 
-	void DoActions(StateController* controller)
-	{
-		for (auto i = 0; i < actions.size(); i++)
-		{
-			actions[i]->Act(controller);
-		}
-	}
+	void DoActions(StateMachine* controller) {};
 
 private:
-	void CheckTransitions(StateController* controller);
-
-public:
-	std::vector<Action*> actions;
-	std::vector<Transition*> transitions;
+	void CheckTransitions(StateMachine* controller) {};
 };
 
+typedef std::function<void()> stateFunction;
+typedef std::unordered_map<int, std::function<void()>> stateMap;
 
-class StateController
+class StateMachine
 {
 public:
-
-	void Update()
+	virtual void init() {}
+	virtual void update()
 	{
-		if (!isActive)
+		//currentState->UpdateState(this);
+		auto iter = states_map.find(currentState);
+		if (iter == states_map.end())
+		{
+			// Not found
+			std::cout << "Not found state" << std::endl;
 			return;
-		currentState->UpdateState(this);
-	}
-
-	void TransitionToState(State* nextState)
-	{
-		if (nextState != remainState)
-		{
-			currentState = nextState;
-			OnExitState();
 		}
+		(iter->second)();
 	}
 
-	bool CheckIfCountDownElapsed(float duration)
+	virtual void SetCurrentState(const int& newState)
 	{
-		stateTimeElapsed = SDL_GetTicks() - startTime;
-		return (stateTimeElapsed >= duration);
+		currentState = newState;
 	}
 
-private:
-	void OnStartState()
-	{
-		startTime = SDL_GetTicks();
-	}
-
-	void OnExitState()
-	{
-		startTime = 0;
-		stateTimeElapsed = 0;
-	}
-
-public:
-	State* currentState;
-	State* remainState;
-	float stateTimeElapsed;
-	float startTime;
-
-private:
-	bool isActive;
+protected:
+	stateMap states_map;
+	int currentState;
 };
 
 
-class Decision
+class Patrol : public State
 {
-public:
-	virtual bool Decide(StateController* controller) {};
+
 };
 
-
-class Transition
+class Enemy;
+class EnemyStateMachine : public StateMachine
 {
 public:
-	Decision* decision;
-	State* trueState;
-	State* falseState;
-};
 
-class PatrolAction : public Action
-{
-private:
-	void Patrol(StateController* controller)
+	enum EnemyState 
 	{
-		std::cout << "Patrol" << std::endl;
+		Patrol,
+		Chase,
+		Attack
+	};
+
+	virtual void init()
+	{
+		// States
+		std::function<void()> patrol_func(std::bind(&EnemyStateMachine::patrol, this));
+		states_map.emplace(EnemyState::Patrol, patrol_func);
+		std::function<void()> attack_func(std::bind(&EnemyStateMachine::attack, this));
+		states_map.emplace(EnemyState::Attack, attack_func);
+		std::function<void()> chase_func(std::bind(&EnemyStateMachine::chase, this));
+		states_map.emplace(EnemyState::Chase, chase_func);
 	}
+
+	virtual void update()
+	{
+		StateMachine::update();
+	}
+
+	void SetEnemy(Enemy* _enemy) { enemy = _enemy; }
+
+	// Decision
+	bool distanceDecision(float threshold);
+
+	// States
+	void patrol();
+
+	void chase();
+
+	void attack();
+
+private:
+	Enemy* enemy;
+	int start_time;
+	int last_time;
 };
 
 #endif	// STATEMACHINE_H

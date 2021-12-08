@@ -17,6 +17,7 @@ public:
 		velocity_x = 0.0f;
 		velocity_x = 0.f;
 		flip_sprite = SDL_FLIP_NONE;
+		score = 0;
 	}
 
 	virtual ~Player() {}
@@ -26,12 +27,11 @@ public:
 	virtual void render(SDL_Renderer* ren);
 	virtual void handle_events(SDL_Event& ev);
 
-	void set_vel(const float x, const float y)
+	virtual void SetVel(const float x, const float y)
 	{
 		velocity_x = x;
 		velocity_y = y;
 	};
-	void get_vel() {};
 
 	SDL_FPoint GetDirectionToMouse(const int x, const int y) const;
 
@@ -50,6 +50,7 @@ private:
 
 private:
 	int full_health;
+	int score;
 	bool is_dead;
 	Weapon* weapon;
 	HealthBar* health_bar;

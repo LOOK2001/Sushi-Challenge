@@ -3,6 +3,7 @@
 #define GAMEOBJECT_H
 
 #include <iostream>
+#include <stdlib.h>
 #include <math.h>
 #include <vector>
 

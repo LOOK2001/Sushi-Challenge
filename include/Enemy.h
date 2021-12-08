@@ -3,6 +3,7 @@
 
 #include "Character.h"
 #include "Weapon.h"
+#include "StateMachine.h"
 
 class Enemy : public Character
 {
@@ -13,7 +14,7 @@ public:
 		srand(35);
 		velocity_x = velocity_y = 1.0f;
 		player = nullptr;
-		range = 500.0f;
+		range = 300.0f;
 		start_time = 0;
 		last_time = 0;
 		decayrate = 0.95f;
@@ -25,6 +26,8 @@ public:
 	virtual void render(SDL_Renderer* ren);
 
 	void SetHitColor(const float& r, const float& g, const float& b, const float& a);
+	void SetRange(const float& _range) { range = _range; }
+	float GetRange() { return range; }
 
 	// collision
 	virtual void CollisionResponse(GameObject* other);
@@ -39,6 +42,7 @@ protected:
 	int last_time;
 	float decayrate;
 	float hit_color[4];
+	StateMachine* stateMachine;
 };
 
 class SushiBoss : public Enemy

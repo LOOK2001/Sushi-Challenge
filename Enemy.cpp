@@ -9,53 +9,60 @@ void Enemy::init()
 	player = Global::GetMainPlayer();
 
 	health = 100;
+
+	stateMachine = new EnemyStateMachine();
+	static_cast<EnemyStateMachine*>(stateMachine)->SetEnemy(this);
+	stateMachine->SetCurrentState(EnemyStateMachine::EnemyState::Patrol);
+	stateMachine->init();
 }
 
 void Enemy::update()
 {
-	float pos_x = rect.x + rect.w * 0.5;
-	float pos_y = rect.y + rect.h * 0.5;
+	stateMachine->update();
 
-	// Prevent player from moving out the screen
-	if (pos_x >= Global::GetWindowWidth() || pos_x <= 0.0f)
-		velocity_x = -velocity_x;
+	//float pos_x = rect.x + rect.w * 0.5;
+	//float pos_y = rect.y + rect.h * 0.5;
 
-	if (pos_y >= Global::GetWindowHeight() || pos_y <= 0.0f)
-		velocity_y = -velocity_y;
+	//// Prevent player from moving out the screen
+	//if (pos_x >= Global::GetWindowWidth() || pos_x <= 0.0f)
+	//	velocity_x = -velocity_x;
 
-	srand((int)pos_x * 100);
+	//if (pos_y >= Global::GetWindowHeight() || pos_y <= 0.0f)
+	//	velocity_y = -velocity_y;
 
-	velocity_x += ((float)rand() / (float)RAND_MAX - 0.5f) * 0.1f;
-	velocity_y += ((float)rand() / (float)RAND_MAX - 0.5f) * 0.1f;
+	//srand((int)pos_x * 10);
 
-	translate(velocity_x, velocity_y);
+	//velocity_x += ((float)rand() / (float)RAND_MAX - 0.5f) * 0.1f;
+	//velocity_y += ((float)rand() / (float)RAND_MAX - 0.5f) * 0.1f;
 
-	// Check if the player close enough
-	if (player)
-	{
-		float distance = Vector2D::Distance(player->GetGlobalPosition(), GetGlobalPosition());
-		if (distance < range)
-		{
-			// Attack the player
-			SDL_FPoint self_pos = GetGlobalPosition();
-			SDL_FPoint player_pos = player->GetGlobalPosition();
+	//translate(velocity_x, velocity_y);
 
-			SDL_FPoint dir{ player_pos.x - self_pos.x, player_pos.y - self_pos.y };
-			dir = Vector2D::Normal(dir);
+	//// Check if the player close enough
+	//if (player)
+	//{
+	//	float distance = Vector2D::Distance(player->GetGlobalPosition(), GetGlobalPosition());
+	//	if (distance < range)
+	//	{
+	//		// Attack the player
+	//		SDL_FPoint self_pos = GetGlobalPosition();
+	//		SDL_FPoint player_pos = player->GetGlobalPosition();
 
-			start_time = SDL_GetTicks();
-			if (start_time >= (last_time + 600)) {
-				last_time = start_time;
+	//		SDL_FPoint dir{ player_pos.x - self_pos.x, player_pos.y - self_pos.y };
+	//		dir = Vector2D::Normal(dir);
 
-				Bullet* bullet = new Bullet("./images/particle2.png", self_pos.x, self_pos.y);
-				bullet->init();
-				bullet->SetDirection(dir);
-				bullet->SetSpeed(2.0f);
-				bullet->SetObjectType(ObjectType::ENEMY_BULLET);
-				AddInstance(bullet);
-			}
-		}
-	}
+	//		start_time = SDL_GetTicks();
+	//		if (start_time >= (last_time + 600)) {
+	//			last_time = start_time;
+
+	//			Bullet* bullet = new Bullet("./images/particle2.png", self_pos.x, self_pos.y);
+	//			bullet->init();
+	//			bullet->SetDirection(dir);
+	//			bullet->SetSpeed(2.0f);
+	//			bullet->SetObjectType(ObjectType::ENEMY_BULLET);
+	//			AddInstance(bullet);
+	//		}
+	//	}
+	//}
 
 	Character::update();
 }

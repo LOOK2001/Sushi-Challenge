@@ -8,7 +8,6 @@ void Player::init()
 	Character::init();
 
 	health = full_health = 100;
-	is_dead = false;
 
 	type = ObjectType::PLAYER;
 
@@ -176,5 +175,5 @@ void Player::CollisionResponse(GameObject* other)
 
 void Player::Died()
 {
-	is_dead = true;
+	std::cout << "Died" << std::endl;
 }

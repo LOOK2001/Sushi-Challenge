@@ -88,12 +88,12 @@ public:
 	virtual void SwitchState(std::string _state);
 	virtual void SetDefaultState(std::string _state);
 
-	void set_vel(const float x, const float y)
+	virtual void SetVel(const float x, const float y)
 	{
 		velocity_x = x;
 		velocity_y = y;
 	};
-	void get_vel() {};
+	virtual void GetVel(float& x, float& y) { x = velocity_x, y = velocity_y; };
 
 	virtual void SetSpeed(const float& _speed) { speed = _speed; }
 	virtual float GetSpeed() const { return speed; }

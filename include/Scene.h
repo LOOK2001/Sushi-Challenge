@@ -154,7 +154,7 @@ public:
 
 			SpriteObject* default_state = new SpriteObject(1, 100, "./images/carrot.png");
 			SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/carrot_hurt.png");
-			Enemy* enemy = new Enemy(800, 800);
+			Enemy* enemy = new Enemy(700, 700);
 			enemy->AddState(default_state, "idle");
 			enemy->AddState(hurt_state, "hurt");
 			enemy->SetDefaultState("idle");
