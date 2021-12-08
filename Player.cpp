@@ -50,7 +50,7 @@ void Player::render(SDL_Renderer* ren)
 	if (current_state.compare("none") == 0)
 		return;
 
-	state[current_state]->Draw(rect.x, rect.y, 0.0, NULL, flip_sprite, 1);
+	state[current_state]->Draw(rect.x, rect.y, 0.0, NULL, flip_sprite, state[current_state]->GetScale());
 
 	Character::render(ren);
 }

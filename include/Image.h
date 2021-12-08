@@ -23,6 +23,8 @@ public:
 	virtual void Draw(float _x, float _y, double angle, const SDL_FPoint* center, const SDL_RendererFlip flip = SDL_FLIP_NONE, float scale = 1) const;
 	virtual void Draw(float x, float y, float scale= 1) const;
 
+	//virtual void ScaleInPlace(float scale= 1);
+
 	int GetImgWidth() const { return surface->w; }
 	int GetImagHeight() const { return surface->h; }
 	SDL_Surface* GetSurface() const { return surface; }
@@ -40,6 +42,8 @@ protected:
 	SDL_Surface* surface;
 	SDL_Texture* texture;
 	SDL_Rect view;
+	//int dest_w = view.w;
+	//int dest_h = view.h;
 };
 
 #endif //IMAGE_H

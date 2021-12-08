@@ -130,7 +130,8 @@ public:
 
 		// Create sprite animation for states of character
 		SpriteObject* walk_state = new SpriteObject(6, 100, "./images/DinoSprites_walk.png");
-		SpriteObject* idle_state = new SpriteObject(4, 100, "./images/DinoSprites_idle.png");
+		SpriteObject* idle_state = new SpriteObject(4, 100, "./images/sushi_chef_idle_spritesheet.png");
+		//idle_state->ScaleInPlace(2);
 
 		player = new Player(right * 0.5f, bottom * 0.5f);
 		player->SetDefaultState("idle");
