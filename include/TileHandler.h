@@ -20,6 +20,8 @@ public:
 	TileSheet(const char* tile_name = nullptr, const int _rows = 1, const int _cols = 1) :
 		columns(_cols), rows(_rows)
 	{
+		tileSet = nullptr;
+
 		if (tile_name)
 			LoadTileSet(tile_name, rows, columns);
 	}
