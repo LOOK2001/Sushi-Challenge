@@ -38,7 +38,7 @@ void Pickup::CollisionResponse(GameObject* other)
 	if (!active)
 		return;
 
-	if (other->GetType() == ObjectType::BULLET)
+	if (other->GetObjectType() == ObjectType::BULLET)
 	{
 		Scene* active_scene = Global::GetActiveScene();
 		SDL_Renderer* my_renderer = Global::GetRenderer();

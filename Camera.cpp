@@ -54,6 +54,30 @@ void Camera::lateUpdate()
 	//SetPos(pos);
 }
 
+void Camera::InsertLevelArea(const int& levelIdx, SDL_FRect _area)
+{
+	std::vector<SDL_FRect> areas = level_area[levelIdx];
+
+	for (int i = 0; i < areas.size(); i++)
+	{
+		if (areas[i].x == _area.x && areas[i].y == _area.y &&
+			areas[i].w == _area.w && areas[i].h == _area.h)
+		{
+			return;
+		}
+	}
+	level_area[levelIdx].push_back(_area);
+}
+
+const std::vector<SDL_FRect>& Camera::GetLevelArea(const int& levelIdx)
+{
+	if (level_area.count(levelIdx))
+	{
+		return level_area[levelIdx];
+	}
+	return std::vector<SDL_FRect>();
+}
+
 void Camera::PlayCameraShake()
 { 
 	start_time = SDL_GetTicks();

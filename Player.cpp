@@ -18,7 +18,7 @@ void Player::init()
 	}
 
 	// Weapon setup
-	weapon = new Weapon("./images/gun.png", 50, 100);
+	weapon = new Weapon("./images/gun.png", 25, 50);
 	weapon->init();
 	float weapon_center_x = weapon->GetImgWidth() / 2.0f;
 	float weapon_center_y = weapon->GetImgHeight() / 2.0f;
@@ -63,20 +63,24 @@ void Player::handle_events(SDL_Event& ev)
 		switch (ev.key.keysym.sym)
 		{
 		case SDLK_a:
+			move_direction = 0;
 			translate(-speed, 0);
 			flip_sprite = SDL_FLIP_HORIZONTAL;
 			SwitchState("walk");
 			break;
 		case SDLK_d:
+			move_direction = 1;
 			flip_sprite = SDL_FLIP_NONE;
 			SwitchState("walk");
 			translate(speed, 0);
 			break;
 		case SDLK_w:
+			move_direction = 2;
 			translate(0, -speed);
 			SwitchState("walk");
 			break;
 		case SDLK_s:
+			move_direction = 3;
 			translate(0, speed);
 			SwitchState("walk");
 			break;
@@ -135,7 +139,10 @@ void Player::UpdateHealthBar(int _health)
 
 void Player::CollisionResponse(GameObject* other)
 {
-	if (other->GetType() == ObjectType::ENEMY_BULLET || other->GetType() == ObjectType::BLAST)
+	ObjectType objectType = other->GetObjectType();
+	if (objectType == ObjectType::ENEMY_BULLET ||
+		objectType == ObjectType::BLAST ||
+		objectType == ObjectType::WALL)
 	{
 
 		if (health <= 0)
@@ -145,7 +152,7 @@ void Player::CollisionResponse(GameObject* other)
 		}
 		else
 		{
-			if (other->GetType() == ObjectType::ENEMY_BULLET)
+			if (other->GetObjectType() == ObjectType::ENEMY_BULLET)
 			{
 				health -= 20;
 				if (health <= 0)
@@ -157,7 +164,7 @@ void Player::CollisionResponse(GameObject* other)
 				other->SetCollidable(false);
 				DeleteObject(other);
 			}
-			else if (other->GetType() == ObjectType::BLAST)
+			else if (other->GetObjectType() == ObjectType::BLAST)
 			{
 				health -= 40;
 				if (health <= 0)
@@ -170,6 +177,37 @@ void Player::CollisionResponse(GameObject* other)
 			}
 		}
 	}
+	if (objectType == ObjectType::WALL)
+	{
+		switch (move_direction)
+		{
+		case 0:
+			translate(speed, 0);
+			break;
+		case 1:
+			translate(-speed, 0);
+			break;
+		case 2:
+			translate(0, speed);
+			break;
+		case 3:
+			translate(0, -speed);
+			break;
+		}
+	}
+	if (objectType == ObjectType::LEVEL1)
+	{
+		Global::GetMainCamera()->SetCurrentLevel(1);
+	}
+	else if (objectType == ObjectType::LEVEL2)
+	{
+		Global::GetMainCamera()->SetCurrentLevel(2);
+	}
+	else if (objectType == ObjectType::LEVEL3)
+	{
+		Global::GetMainCamera()->SetCurrentLevel(3);
+	}
+
 }
 
 void Player::Died()

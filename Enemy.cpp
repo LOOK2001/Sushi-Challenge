@@ -87,7 +87,7 @@ void Enemy::CollisionResponse(GameObject* other)
 	if (!active)
 		return;
 
-	if (other->GetType() == ObjectType::BULLET)
+	if (other->GetObjectType() == ObjectType::BULLET)
 	{
 		if (health <= 0)
 		{
@@ -172,7 +172,7 @@ void SushiBoss::CollisionResponse(GameObject* other)
 	if (!active)
 		return;
 
-	if (other->GetType() == ObjectType::BULLET)
+	if (other->GetObjectType() == ObjectType::BULLET)
 	{
 		if (health <= 0)
 		{

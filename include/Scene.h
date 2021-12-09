@@ -76,6 +76,8 @@ class ExampleScene : public Scene
 public:
 	virtual void init()
 	{
+		objects_list.reserve(1000);
+
 		use_sphere_collider = false;
 
 		float right = (float)Global::GetWindowWidth();
@@ -90,19 +92,18 @@ public:
 
 		// The background map
 		map = new Map();
+		// Scale map up
+		map->SetScaleFactor(1);
+		// Load tile set of map
+		map->LoadTiles("./images/tileSet5.png", 4, 8);
 		// Map data stores index of tiles
 		map->LoadMap("./include/map.txt");
-		// Load tile set of map
-		map->LoadTiles("./images/tileSet3.png", 4, 8);
-		// Scale map up
-		map->SetScaleFactor(1.5);
 		map->init();
 		objects_list.push_back(map);
 		Global::SetActiveMap(map);
 
-		TileSheet* sh = map->GetTileSheet();
-		float offset = (float)sh->GetTileWidth();
-		camera->SetViewOffset(offset * 2);
+		int offset = (map->GetTileWidth() > map->GetTileHeight()) ? map->GetTileWidth() : map->GetTileHeight();
+		camera->SetViewOffset((float)offset);
 
 		// Random position for coins
 		std::random_device r;
@@ -132,14 +133,14 @@ public:
 		SpriteObject* walk_state = new SpriteObject(6, 100, "./images/DinoSprites_walk.png");
 		SpriteObject* idle_state = new SpriteObject(4, 100, "./images/DinoSprites_idle.png");
 
-		player = new Player(right * 0.5f, bottom * 0.5f);
+		player = new Player(150.0f, 150.0f);
 		player->SetDefaultState("idle");
 		player->AddState(walk_state, "walk");
 		player->AddState(idle_state, "idle");
 		float view_width = (float)walk_state->GetViewWidth();
 		float view_height = (float)walk_state->GetViewHeight();
 		player->init();
-		player->SetBoxCollider(view_width / 4, view_height / 2, view_width / 2, 80);
+		player->SetBoxCollider(30, 50, 30, 30);
 		player->SetCircleColliderCenter(view_width / 2, view_height / 2);
 		player->SetCirlceColliderRadius(view_width / 2);
 		Global::SetMainPlayer(player);
@@ -165,12 +166,39 @@ public:
 
 		SpriteObject* default_state = new SpriteObject(1, 100, "./images/sushi.png");
 		SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/sushi_hurt.png");
-		boss = new SushiBoss(100, 100);
+		boss = new SushiBoss(1600, 1600);
 		boss->AddState(default_state, "idle");
 		boss->AddState(hurt_state, "hurt");
 		boss->SetDefaultState("idle");
 		boss->init();
 		objects_list.push_back(boss);
+
+		float w = (float)map->GetTileWidth();
+		float h = (float)map->GetTileHeight();
+		SDL_FRect area{ 0.0f, 320.0f, 765.0f, 320.0f };
+		RectObject* level_1_area = new RectObject(area.x, area.y, area.w, area.h);
+		level_1_area->init();
+		level_1_area->SetObjectType(ObjectType::LEVEL1);
+		objects_list.push_back(level_1_area);
+		camera->InsertLevelArea(1, area);
+		area = { 1216.0f, 0.0f, 576.0f, 640.0f };
+		RectObject* level_2_area = new RectObject(area.x, area.y, area.w, area.h);
+		level_2_area->init();
+		level_2_area->SetObjectType(ObjectType::LEVEL2);
+		objects_list.push_back(level_2_area);
+		camera->InsertLevelArea(2, area);
+		area = { w * 21, h * 20, w * 11, h * 12 };
+		RectObject* level_3_area = new RectObject(area.x, area.y, area.w, area.h);
+		level_3_area->init();
+		level_3_area->SetObjectType(ObjectType::LEVEL3);
+		objects_list.push_back(level_3_area);
+		camera->InsertLevelArea(3, area);
+		area = { 0.0f, 0.0f, w * 6, h * 5 };
+		camera->InsertLevelArea(0, area);
+		area = { w * 11, h * 6, w * 8, h * 5 };
+		camera->InsertLevelArea(0, area);
+		area = { w * 24, h * 10, w * 4, h * 10 };
+		camera->InsertLevelArea(0, area);
 	}
 
 	virtual void handle_events(SDL_Event& ev)
@@ -195,6 +223,8 @@ public:
 
 	virtual void update()
 	{
+		Global::GetMainCamera()->SetCurrentLevel(0);
+
 		handle_collisions();
 
 		//// Camera follow the player
@@ -206,6 +236,17 @@ public:
 		//camera->SetPos(pos.x - w + 100, pos.y - h + 100);
 
 		Scene::update();
+
+		//SDL_FPoint pos = player->GetPosition();
+		//if (pos.x >= 0 && pos.x <= 768 &&
+		//	pos.y >= 320 && pos.y <= 704)
+		//{
+		//	camera->SetCurrentLevel(1);
+		//}
+		//else
+		//{
+		//	camera->SetCurrentLevel(0);
+		//}
 	}
 
 	virtual void render(SDL_Renderer* ren)
@@ -261,6 +302,7 @@ private:
 	bool use_sphere_collider;
 	std::vector<Enemy*> enemy_list;
 	SushiBoss* boss;
+	int currentLevel;
 };
 
 #endif // SCENE_H

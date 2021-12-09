@@ -50,6 +50,8 @@ private:
 
 private:
 	int full_health;
+	// For collision response
+	int move_direction;
 	int score;
 	bool is_dead;
 	Weapon* weapon;

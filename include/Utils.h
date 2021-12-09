@@ -17,6 +17,8 @@ namespace Vector2D
 		SDL_FPoint norm;
 		if (len > 0)
 			norm = { _vec.x / len, _vec.y / len };
+		else
+			norm = { 1.0, 0.0 };
 		return norm;
 	}
 

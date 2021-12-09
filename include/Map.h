@@ -12,9 +12,11 @@ public:
 	Map(const char* mapFile = nullptr , const char* tilesFile = nullptr)
 	{
 		tileSheet = nullptr;
-
-		LoadMap(mapFile);
-		LoadTiles(tilesFile);
+		
+		if (tilesFile)
+			LoadTiles(tilesFile);
+		if (mapFile)
+			LoadMap(mapFile);
 		scale_factor = 1;
 	}
 	~Map()
@@ -32,6 +34,9 @@ public:
 	TileSheet* GetTileSheet() const { return tileSheet; }
 	void SetScaleFactor(float _scale) { scale_factor = _scale; }
 	float GetScaleFactor() const { return scale_factor; }
+
+	int GetTileWidth() const { return tileSheet->GetTileWidth() * scale_factor; }
+	int GetTileHeight() const { return tileSheet->GetTileHeight() * scale_factor; }
 
 private:
 	std::string map_file_name;
