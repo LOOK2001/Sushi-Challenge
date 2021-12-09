@@ -56,6 +56,8 @@ private:
 	bool is_dead;
 	Weapon* weapon;
 	HealthBar* health_bar;
+	float speed_y;
+	float speed_x;
 };
 
 #endif	//PLAYER_H

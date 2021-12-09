@@ -60,28 +60,50 @@ void Player::handle_events(SDL_Event& ev)
 	if (ev.type == SDL_KEYDOWN)
 	{
 		key_pressed = true;
+		const Uint8* state = SDL_GetKeyboardState(NULL);
+		speed_y = speed_x = 0.0f;
+
 		switch (ev.key.keysym.sym)
 		{
 		case SDLK_a:
-			move_direction = 0;
-			translate(-speed, 0);
+			speed_x = -speed;
+			if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_S]) {
+				speed_x *= 0.5;
+				speed_y = (state[SDL_SCANCODE_W] != 0) ? speed * -0.5 : speed * 0.5;
+			}
 			flip_sprite = SDL_FLIP_HORIZONTAL;
 			SwitchState("walk");
+			translate(speed_x, speed_y);
 			break;
+
 		case SDLK_d:
-			move_direction = 1;
+			speed_x = speed;
+			if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_S]) {
+				speed_x *= 0.5;
+				speed_y = (state[SDL_SCANCODE_W] != 0) ? speed * -0.5 : speed * 0.5;
+			}
 			flip_sprite = SDL_FLIP_NONE;
 			SwitchState("walk");
-			translate(speed, 0);
+			translate(speed_x, speed_y);
 			break;
+
 		case SDLK_w:
-			move_direction = 2;
-			translate(0, -speed);
+			speed_y = -speed;
+			if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_D]) {
+				speed_y = speed * -0.5;
+				speed_x = (state[SDL_SCANCODE_D] != 0) ? speed * 0.5 : speed * -0.5;
+			}
+			translate(speed_x, speed_y);
 			SwitchState("walk");
 			break;
+
 		case SDLK_s:
-			move_direction = 3;
-			translate(0, speed);
+			speed_y = speed;
+			if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_D]) {
+				speed_y *= 0.5;
+				speed_x = (state[SDL_SCANCODE_D] != 0) ? speed * 0.5 : speed * -0.5;
+			}
+			translate(speed_x, speed_y);
 			SwitchState("walk");
 			break;
 		}
@@ -179,21 +201,7 @@ void Player::CollisionResponse(GameObject* other)
 	}
 	if (objectType == ObjectType::WALL)
 	{
-		switch (move_direction)
-		{
-		case 0:
-			translate(speed, 0);
-			break;
-		case 1:
-			translate(-speed, 0);
-			break;
-		case 2:
-			translate(0, speed);
-			break;
-		case 3:
-			translate(0, -speed);
-			break;
-		}
+		translate(-speed_x, -speed_y);
 	}
 	if (objectType == ObjectType::LEVEL1)
 	{
