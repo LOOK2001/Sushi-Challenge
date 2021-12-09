@@ -30,8 +30,8 @@ public:
 		if (tileSet)
 			delete tileSet;
 
-		for (auto img : tiles)
-			delete img;
+		for (size_t i = 0; i < tiles.size(); i++)
+			delete tiles[i];
 	}
 
 	Image* GetTile(int index) const

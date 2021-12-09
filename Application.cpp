@@ -162,7 +162,7 @@ void Application::handle_events()
 				if (_scene)
 				{
 					_scene->quit();
-					delete _scene;
+					//delete _scene;
 				}
 					
 				current_scene = new ExampleScene(this);
