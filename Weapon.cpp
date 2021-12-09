@@ -47,7 +47,7 @@ void Bomb::update()
 		// Blast
 		SDL_FPoint pos = GetGlobalPosition();
 		Bullet* blast = new Bullet("./images/bomb2.png", pos.x, pos.y);
-		blast->SetLiftime(3000);
+		blast->SetLiftime(1500);
 		blast->init();
 		blast->SetObjectType(ObjectType::BLAST);
 		AddInstance(blast);

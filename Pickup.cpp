@@ -57,3 +57,12 @@ void Pickup::CollisionResponse(GameObject* other)
 		active = false;
 	}
 }
+
+void Portal::CollisionResponse(GameObject* other)
+{
+	if (other->GetObjectType() == ObjectType::PLAYER)
+	{
+		Global::GetActiveScene()->GameEnd();
+		SetActive(false);
+	}
+}

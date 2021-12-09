@@ -20,7 +20,7 @@ bool EnemyStateMachine::distanceDecision(float threshold)
 
 void EnemyStateMachine::patrol()
 {
-	std::cout << "patrol" << std::endl;
+	//std::cout << "patrol" << std::endl;
 
 	float velocity_x, velocity_y;
 	enemy->GetVel(velocity_x, velocity_y);
@@ -28,7 +28,7 @@ void EnemyStateMachine::patrol()
 
 	if (distanceDecision(enemy->GetRange()))
 	{
-		SetCurrentState(EnemyState::Attack);
+		SetCurrentState(EnemyState::Chase);
 	}
 	else
 	{
@@ -38,7 +38,7 @@ void EnemyStateMachine::patrol()
 
 void EnemyStateMachine::chase()
 {
-	std::cout << "chase" << std::endl;
+	//std::cout << "chase" << std::endl;
 
 	Player* player = Global::GetMainPlayer();
 	SDL_FPoint enemy_pos = enemy->GetGlobalPosition();
@@ -48,13 +48,13 @@ void EnemyStateMachine::chase()
 	dir = Vector2D::Normal(dir);
 	enemy->translate(dir.x * 3.0, dir.y * 3.0);
 
-	if (distanceDecision(enemy->GetRange()))
+	if (distanceDecision(50.0))
 	{
 		SetCurrentState(EnemyState::Attack);
 	}
 	else
 	{
-		if (distanceDecision(enemy->GetRange() + 200))
+		if (distanceDecision(enemy->GetRange() + 100))
 			SetCurrentState(EnemyState::Chase);
 		else
 			SetCurrentState(EnemyState::Patrol);
@@ -63,6 +63,8 @@ void EnemyStateMachine::chase()
 
 void EnemyStateMachine::attack()
 {
+	//std::cout << "attack" << std::endl;
+
 	// Attack the player
 	Player* player = Global::GetMainPlayer();
 	SDL_FPoint enemy_pos = enemy->GetGlobalPosition();

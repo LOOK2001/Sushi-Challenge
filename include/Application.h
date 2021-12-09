@@ -34,7 +34,7 @@ public:
 
 	void quit();
 
-	void set_is_game_over(int go);
+	void set_is_game_over(const int& go);
 
 private:
 	bool is_running;
@@ -61,6 +61,7 @@ private:
 	SDL_Rect pause_rect;
 
 	SDL_Rect menu_background;
+	Image* end_background;
 
 	TextHandler* title_menu;
 	SDL_Rect title_rect;

@@ -30,24 +30,20 @@ void Map::LoadMap(const char* _file_name)
 
 		std::string tile_index;
 		std::vector<int> tile_line;
-		bool isWall = false;
 		i = 0;
 		while (iss >> tile_index)
 		{
 			int index = std::stoi(tile_index);
 
 			// If the index is wall, create a box collider
-			if (index >=3 && index <= 10)
+			if (index >=2 && index <= 10)
 			{
-				isWall = true;
 				RectObject* wall = new RectObject(i * width, j * height, width, height);
 				wall->init();
 				wall->SetObjectType(ObjectType::WALL);
+				if (index == 2)
+					wall->SetObjectType(ObjectType::DOOR);
 				AddInstance(wall);
-			}
-			else
-			{
-				isWall = false;
 			}
 			tile_line.push_back(index);
 			i++;

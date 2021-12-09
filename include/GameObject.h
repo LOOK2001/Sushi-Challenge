@@ -24,6 +24,7 @@ enum ObjectType
 	ENEMY_BULLET,
 	BLAST,
 	WALL,
+	DOOR,
 	LEVEL1,
 	LEVEL2,
 	LEVEL3

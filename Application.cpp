@@ -16,7 +16,7 @@ Application::Application(const std::string& name /*= "CPSC-6041"*/)
 	fps = 60;
 	frame_duration = 1000 / fps;
 
-	current_scene = new ExampleScene();
+	current_scene = new ExampleScene(this);
 	Global::SetActiveScene(current_scene);
 }
 
@@ -27,6 +27,12 @@ Application::~Application()
 
 	if (my_renderer)
 		SDL_DestroyRenderer(my_renderer);
+
+	if (current_scene)
+		delete current_scene;
+
+	if (end_background)
+		delete end_background;
 }
 
 void Application::init()
@@ -74,6 +80,8 @@ void Application::init()
 	menu_background.y = 0;
 	menu_background.w = Global::GetWindowWidth();
 	menu_background.h = Global::GetWindowHeight();
+
+	end_background = new Image("./images/TheEnd.png");
 
 	//Create Title
 	title_menu = new TextHandler();
@@ -150,7 +158,14 @@ void Application::handle_events()
 			else if(is_game_over == 2){
 				is_game_over = 1;
 				is_paused = false;
-				current_scene = new ExampleScene();
+				Scene* _scene = Global::GetActiveScene();
+				if (_scene)
+				{
+					_scene->quit();
+					delete _scene;
+				}
+					
+				current_scene = new ExampleScene(this);
 				Global::SetActiveScene(current_scene);
 				current_scene->init();
 			}
@@ -191,6 +206,11 @@ void Application::redner()
 		gameover_menu->text_render(gameover_rect);
 		subtitle_menu->text_render(subtitle_rect);
 	}
+	else if (is_game_over == 3)
+	{
+		SDL_FPoint pos = Global::GetMainCamera()->GetPos();
+		end_background->Draw(pos.x, pos.y, 0.0, nullptr);
+	}
 	else
 	{
 		current_scene->render(my_renderer);
@@ -230,4 +250,9 @@ void Application::quit()
 
 	IMG_Quit();
 	SDL_Quit();
+}
+
+void Application::set_is_game_over(const int& go)
+{
+	is_game_over = go;
 }

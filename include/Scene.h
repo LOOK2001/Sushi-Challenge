@@ -13,18 +13,27 @@
 #include "Pickup.h"
 #include "ParticleEmitter.h"
 #include "Enemy.h"
+#include "Application.h"
 
 
 class Global;
+class Application;
 // Scene Declaration:
 // Base class for Scene. Scene class manage every gameObjects in the scene
 class Scene
 {
 public:
+	Scene(Application* _app)
+	{
+		app = _app;
+	}
+
 	~Scene()
 	{
-		for (auto obj : objects_list)
-			delete obj;
+		for (size_t i = 0; i < objects_list.size(); i++) {
+			if (objects_list[i])
+				delete objects_list[i];
+		}
 	}
 	virtual void init() {
 		for (size_t i = 0; i < objects_list.size(); i++) {
@@ -62,18 +71,27 @@ public:
 		}
 	}
 
+	virtual void SwitchLevel(const int& _level) {}
+
 	virtual void AddGameObject(GameObject* _obj) { objects_list.push_back(_obj); }
 	virtual void RemoveGameObject(GameObject * _obj) { objects_list.erase(std::remove(objects_list.begin(), objects_list.end(), _obj), objects_list.end()); }
 
+	virtual void GameEnd() {}
+
 protected:
 	std::vector<GameObject*> objects_list;
+	Application* app;
 };
 
 
+class Application;
 // SceneHw3 Declaration:
 class ExampleScene : public Scene
 {
 public:
+	ExampleScene(Application* app) : Scene(app)
+	{}
+
 	virtual void init()
 	{
 		objects_list.reserve(1000);
@@ -133,7 +151,7 @@ public:
 		SpriteObject* walk_state = new SpriteObject(6, 100, "./images/DinoSprites_walk.png");
 		SpriteObject* idle_state = new SpriteObject(4, 100, "./images/DinoSprites_idle.png");
 
-		player = new Player(150.0f, 150.0f);
+		player = new Player(120.0f, 150.0f);
 		player->SetDefaultState("idle");
 		player->AddState(walk_state, "walk");
 		player->AddState(idle_state, "idle");
@@ -148,14 +166,53 @@ public:
 		objects_list.push_back(player);
 
 		// Enemy
-		for (auto i = 0; i < 1; i++)
-		{
-			//float pos_x = uniform_pos(e1);
-			//float pos_y = uniform_pos(e1);
+		float w = (float)map->GetTileWidth();
+		float h = (float)map->GetTileHeight();
 
+		for (auto i = 0; i < 10; i++)
+		{
 			SpriteObject* default_state = new SpriteObject(1, 100, "./images/carrot.png");
 			SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/carrot_hurt.png");
-			Enemy* enemy = new Enemy(300, 300);
+			Enemy* enemy = new Enemy(400, 400);
+			enemy->AddState(default_state, "idle");
+			enemy->AddState(hurt_state, "hurt");
+			enemy->SetDefaultState("idle");
+			enemy->init();
+			enemy_list.push_back(enemy);
+			objects_list.push_back(enemy);
+		}
+
+		for (auto i = 0; i < 15; i++)
+		{
+			SpriteObject* default_state = new SpriteObject(1, 100, "./images/rice.png");
+			SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/rice_hurt.png");
+			Enemy* enemy = new Enemy(w * 24, h * 6);
+			enemy->AddState(default_state, "idle");
+			enemy->AddState(hurt_state, "hurt");
+			enemy->SetDefaultState("idle");
+			enemy->init();
+			enemy_list.push_back(enemy);
+			objects_list.push_back(enemy);
+		}
+
+		for (auto i = 0; i < 3; i++)
+		{
+			SpriteObject* default_state = new SpriteObject(1, 100, "./images/carrot.png");
+			SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/carrot_hurt.png");
+			Enemy* enemy = new Enemy(1600, 1600);
+			enemy->AddState(default_state, "idle");
+			enemy->AddState(hurt_state, "hurt");
+			enemy->SetDefaultState("idle");
+			enemy->init();
+			enemy_list.push_back(enemy);
+			objects_list.push_back(enemy);
+		}
+
+		for (auto i = 0; i < 3; i++)
+		{
+			SpriteObject* default_state = new SpriteObject(1, 100, "./images/rice.png");
+			SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/rice_hurt.png");
+			Enemy* enemy = new Enemy(1600, 1600);
 			enemy->AddState(default_state, "idle");
 			enemy->AddState(hurt_state, "hurt");
 			enemy->SetDefaultState("idle");
@@ -173,8 +230,6 @@ public:
 		boss->init();
 		objects_list.push_back(boss);
 
-		float w = (float)map->GetTileWidth();
-		float h = (float)map->GetTileHeight();
 		SDL_FRect area{ 0.0f, 320.0f, 765.0f, 320.0f };
 		RectObject* level_1_area = new RectObject(area.x, area.y, area.w, area.h);
 		level_1_area->init();
@@ -227,26 +282,7 @@ public:
 
 		handle_collisions();
 
-		//// Camera follow the player
-		//SDL_FPoint pos = player->GetPosition();
-		//float w = camera->GetWidth() / 2;
-		//float h = camera->GetHeight() / 2;
-
-		//// Move camera on top of character
-		//camera->SetPos(pos.x - w + 100, pos.y - h + 100);
-
 		Scene::update();
-
-		//SDL_FPoint pos = player->GetPosition();
-		//if (pos.x >= 0 && pos.x <= 768 &&
-		//	pos.y >= 320 && pos.y <= 704)
-		//{
-		//	camera->SetCurrentLevel(1);
-		//}
-		//else
-		//{
-		//	camera->SetCurrentLevel(0);
-		//}
 	}
 
 	virtual void render(SDL_Renderer* ren)
@@ -287,11 +323,19 @@ public:
 				if (result)
 				{
 					src->CollisionResponse(dest);
-					dest->CollisionResponse(src);
+					//dest->CollisionResponse(src);
 				}
 			}
 		}
 	}
+
+	void SwitchLevel(const int& _level)
+	{
+		currentLevel = _level;
+		Global::GetMainCamera()->SetCurrentLevel(_level);
+	}
+
+	virtual void GameEnd();
 
 private:
 	Player* player;

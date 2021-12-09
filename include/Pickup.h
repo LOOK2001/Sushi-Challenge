@@ -38,4 +38,17 @@ private:
 	SpriteObject* sprite;
 	ParticleEmitter* pe;
 };
+
+
+class Portal : public Pickup
+{
+public:
+	Portal(float _x, float _y, const char* imageName) :
+		Pickup(_x, _y, imageName)
+	{}
+
+	// collision
+	virtual void CollisionResponse(GameObject* other);
+};
+
 #endif //PICKUP_H

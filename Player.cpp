@@ -50,7 +50,7 @@ void Player::render(SDL_Renderer* ren)
 	if (current_state.compare("none") == 0)
 		return;
 
-	state[current_state]->Draw(rect.x, rect.y, 0.0, NULL, flip_sprite, 1);
+	state[current_state]->Draw(rect.x, rect.y, 0.0, NULL, flip_sprite, 1, false);
 
 	Character::render(ren);
 }
@@ -154,7 +154,7 @@ void Player::CollisionResponse(GameObject* other)
 		{
 			if (other->GetObjectType() == ObjectType::ENEMY_BULLET)
 			{
-				health -= 20;
+				health -= 2;
 				if (health <= 0)
 				{
 					UpdateHealthBar(0);
@@ -166,7 +166,7 @@ void Player::CollisionResponse(GameObject* other)
 			}
 			else if (other->GetObjectType() == ObjectType::BLAST)
 			{
-				health -= 40;
+				health -= 5;
 				if (health <= 0)
 				{
 					UpdateHealthBar(0);
@@ -197,15 +197,15 @@ void Player::CollisionResponse(GameObject* other)
 	}
 	if (objectType == ObjectType::LEVEL1)
 	{
-		Global::GetMainCamera()->SetCurrentLevel(1);
+		Global::GetActiveScene()->SwitchLevel(1);
 	}
 	else if (objectType == ObjectType::LEVEL2)
 	{
-		Global::GetMainCamera()->SetCurrentLevel(2);
+		Global::GetActiveScene()->SwitchLevel(2);
 	}
 	else if (objectType == ObjectType::LEVEL3)
 	{
-		Global::GetMainCamera()->SetCurrentLevel(3);
+		Global::GetActiveScene()->SwitchLevel(3);
 	}
 
 }
