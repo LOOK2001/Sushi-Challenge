@@ -58,7 +58,7 @@ public:
 		else if(currentLevel == 0) {
 				std::vector<SDL_FRect> areas = GetLevelArea(currentLevel);
 				bool flag = false;
-				for (int i = 0; i < areas.size(); i++)
+				for (size_t i = 0; i < areas.size(); i++)
 				{
 					SDL_FRect area = areas[i];
 					if ((world_x >= area.x && world_x <= area.x + area.w &&

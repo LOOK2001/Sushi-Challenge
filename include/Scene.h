@@ -28,7 +28,7 @@ public:
 		app = _app;
 	}
 
-	~Scene()
+	virtual ~Scene()
 	{
 		for (size_t i = 0; i < objects_list.size(); i++) {
 			if (objects_list[i])

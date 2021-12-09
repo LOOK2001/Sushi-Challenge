@@ -58,7 +58,7 @@ void Camera::InsertLevelArea(const int& levelIdx, SDL_FRect _area)
 {
 	std::vector<SDL_FRect> areas = level_area[levelIdx];
 
-	for (int i = 0; i < areas.size(); i++)
+	for (size_t i = 0; i < areas.size(); i++)
 	{
 		if (areas[i].x == _area.x && areas[i].y == _area.y &&
 			areas[i].w == _area.w && areas[i].h == _area.h)
