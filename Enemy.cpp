@@ -6,6 +6,8 @@ void Enemy::init()
 {
 	Character::init();
 
+	SetObjectType(ObjectType::ENEMY);
+
 	player = Global::GetMainPlayer();
 
 	health = 100;
@@ -198,6 +200,7 @@ void SushiBoss::CollisionResponse(GameObject* other)
 			SDL_FPoint pos = GetGlobalPosition();
 			Portal* portal = new Portal(pos.x + 100, pos.y, "./images/Portal.png");
 			portal->init();
+			portal->SetObjectType(ObjectType::PORTAL);
 			AddInstance(portal);
 
 			DeleteObject(this);

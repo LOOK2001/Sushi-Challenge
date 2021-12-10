@@ -15,6 +15,7 @@ Application::Application(const std::string& name /*= "CPSC-6041"*/)
 
 	fps = 60;
 	frame_duration = 1000 / fps;
+	timer = 0;
 
 	current_scene = new ExampleScene(this);
 	Global::SetActiveScene(current_scene);
@@ -159,17 +160,20 @@ void Application::handle_events()
 			}
 			//Exit Game Over and Victory Screens
 			else if(is_game_over >= 2){
-				is_game_over = 1;
-				is_paused = false;
-				Scene* _scene = Global::GetActiveScene();
-				if (_scene)
+				if (timer <= 0)
 				{
-					_scene->quit();
+					is_game_over = 1;
+					is_paused = false;
+					Scene* _scene = Global::GetActiveScene();
+					if (_scene)
+					{
+						_scene->quit();
+					}
+
+					current_scene = new ExampleScene(this);
+					Global::SetActiveScene(current_scene);
+					current_scene->init();
 				}
-					
-				current_scene = new ExampleScene(this);
-				Global::SetActiveScene(current_scene);
-				current_scene->init();
 			}
 		}
 		//Only handle events if the game is not paused
@@ -216,6 +220,7 @@ void Application::redner()
 	//Render Victory Screen
 	else if (is_game_over == 3)
 	{
+		timer--;
 		SDL_FPoint pos = Global::GetMainCamera()->GetPos();
 		end_background->Draw(pos.x, pos.y, 0.0, nullptr);
 	}
@@ -245,6 +250,7 @@ void Application::framerate()
 	}
 
 	// make sure fixed frame rate
+	duration = SDL_GetTicks() - start_time;
 	if (duration < frame_duration) {
 		SDL_Delay(frame_duration - duration);
 	}
@@ -264,4 +270,8 @@ void Application::quit()
 void Application::set_is_game_over(const int& go)
 {
 	is_game_over = go;
+	if (is_game_over == 3)
+	{
+		timer = 150;
+	}
 }

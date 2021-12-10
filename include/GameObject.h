@@ -20,6 +20,8 @@ enum ObjectType
 	NONE,
 	PLAYER,
 	PICKUP,
+	PORTAL,
+	ENEMY,
 	BULLET,
 	ENEMY_BULLET,
 	BLAST,

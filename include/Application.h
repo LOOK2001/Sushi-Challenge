@@ -49,6 +49,7 @@ private:
 	int last_count_start_time;
 	int fps;
 	int frame_duration;
+	int timer;
 
 	SDL_Event ev;
 
