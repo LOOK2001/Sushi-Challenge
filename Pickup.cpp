@@ -63,6 +63,8 @@ void Portal::CollisionResponse(GameObject* other)
 {
 	if (other->GetObjectType() == ObjectType::PLAYER)
 	{
+		// Game End
+		// Victory
 		Global::GetActiveScene()->GameEnd();
 		SetActive(false);
 	}

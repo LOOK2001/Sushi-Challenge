@@ -120,38 +120,16 @@ public:
 		objects_list.push_back(map);
 		Global::SetActiveMap(map);
 
+		// Viewport offset for camera
 		int offset = (map->GetTileWidth() > map->GetTileHeight()) ? map->GetTileWidth() : map->GetTileHeight();
 		camera->SetViewOffset((float)offset * 2);
-
-		// Random position for coins
-		std::random_device r;
-		std::default_random_engine e1(r());
-		std::uniform_real_distribution<float> uniform_pos(0, 1500);
-
-		//// Create 20 coins
-		//for (auto i = 0; i < 5; i++)
-		//{
-		//	float pos_x = uniform_pos(e1);
-		//	float pos_y = uniform_pos(e1);
-
-		//	Pickup* coin = new Pickup(pos_x, pos_y, "./images/coinSprites.png");
-		//	coin->init();
-		//	coin->SetCount(6);
-		//	coin->SetDuration(100.0);
-		//	float width = coin->GetWidth();
-		//	float height = coin->GetHeight();
-		//	coin->SetBoxCollider(0.0, 0.0, width * 2, height * 2);
-		//	coin->SetCircleColliderCenter(width / 2, height / 2);
-		//	coin->SetCirlceColliderRadius(width / 2);
-		//	pickUps.push_back(coin);
-		//	objects_list.push_back(coin);
-		//}
 
 		// Create sprite animation for states of character
 		SpriteObject* walk_state = new SpriteObject(6, 100, "./images/sushi_chef_walk_spritesheet.png");
 		SpriteObject* idle_state = new SpriteObject(4, 100, "./images/sushi_chef_idle_spritesheet.png");
 		//idle_state->ScaleInPlace(2);
 
+		// Player
 		player = new Player(120.0f, 150.0f);
 		player->SetDefaultState("idle");
 		player->AddState(walk_state, "walk");
@@ -166,7 +144,7 @@ public:
 		camera->SetTarget(player);
 		objects_list.push_back(player);
 
-		// Pickup
+		// Pickup gun
 		Pickup* gun = new Pickup(250.0f, 200.0f, "./images/gun2.png");
 		gun->init();
 		gun->SetObjectType(ObjectType::GUN);
@@ -176,6 +154,7 @@ public:
 		float w = (float)map->GetTileWidth();
 		float h = (float)map->GetTileHeight();
 
+		// Enemies for level 1
 		for (auto i = 0; i < 10; i++)
 		{
 			SpriteObject* default_state = new SpriteObject(1, 100, "./images/carrot.png");
@@ -189,6 +168,7 @@ public:
 			objects_list.push_back(enemy);
 		}
 
+		// Enemies for level 2
 		for (auto i = 0; i < 15; i++)
 		{
 			SpriteObject* default_state = new SpriteObject(1, 100, "./images/rice.png");
@@ -202,6 +182,7 @@ public:
 			objects_list.push_back(enemy);
 		}
 
+		// Enemies for level 3
 		for (auto i = 0; i < 3; i++)
 		{
 			SpriteObject* default_state = new SpriteObject(1, 100, "./images/carrot.png");
@@ -215,6 +196,7 @@ public:
 			objects_list.push_back(enemy);
 		}
 
+		// Enemies for level 3
 		for (auto i = 0; i < 3; i++)
 		{
 			SpriteObject* default_state = new SpriteObject(1, 100, "./images/rice.png");
@@ -228,6 +210,7 @@ public:
 			objects_list.push_back(enemy);
 		}
 
+		// Sushi boss
 		SpriteObject* default_state = new SpriteObject(1, 100, "./images/sushi.png");
 		SpriteObject* hurt_state = new SpriteObject(1, 100, "./images/sushi_hurt.png");
 		boss = new SushiBoss(1600, 1600);
@@ -237,6 +220,7 @@ public:
 		boss->init();
 		objects_list.push_back(boss);
 
+		// Collision trigger for level 1
 		SDL_FRect area{ 0.0f, 320.0f, 765.0f, 320.0f };
 		RectObject* level_1_area = new RectObject(area.x, area.y, area.w, area.h);
 		level_1_area->init();
@@ -244,16 +228,19 @@ public:
 		objects_list.push_back(level_1_area);
 		camera->InsertLevelArea(1, area);
 		area = { 1216.0f, 0.0f, 576.0f, 640.0f };
+		// Collision trigger for level 2
 		RectObject* level_2_area = new RectObject(area.x, area.y, area.w, area.h);
 		level_2_area->init();
 		level_2_area->SetObjectType(ObjectType::LEVEL2);
 		objects_list.push_back(level_2_area);
 		camera->InsertLevelArea(2, area);
 		area = { w * 21, h * 20, w * 11, h * 12 };
+		// Collision trigger for level 3
 		RectObject* level_3_area = new RectObject(area.x, area.y, area.w, area.h);
 		level_3_area->init();
 		level_3_area->SetObjectType(ObjectType::LEVEL3);
 		objects_list.push_back(level_3_area);
+		// Collision trigger for level 0
 		camera->InsertLevelArea(3, area);
 		area = { 0.0f, 0.0f, w * 6, h * 5 };
 		camera->InsertLevelArea(0, area);
@@ -267,6 +254,7 @@ public:
 	{
 		if (ev.type == SDL_KEYDOWN)
 		{
+			// Switch between to collision method
 			switch (ev.key.keysym.sym)
 			{
 			case SDLK_1:
@@ -285,6 +273,7 @@ public:
 
 	virtual void update()
 	{
+		// Level 0 as a default
 		Global::GetMainCamera()->SetCurrentLevel(0);
 
 		handle_collisions();
@@ -303,8 +292,10 @@ public:
 		Scene::render(ren);
 	}
 
+	// Collision handler
 	void handle_collisions()
 	{
+		// Loop through every object in the scene
 		for (unsigned int i = 0; i < objects_list.size(); i++)
 		{
 			GameObject* src = objects_list[i];
