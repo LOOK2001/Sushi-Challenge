@@ -13,14 +13,15 @@ Finally, the sushi chef need to defeat the Evil Sushi boss and collect a amount 
 **********
 Directions:
 **********
-W- Up
-A- Left
-S- Down
-D- Right
+Up        - W 
+Left      - A
+Down      - S 
+Right     - D 
 
-Left-click- Shoot Gun
+Shoot Gun - Left-click
+
+Pause     - SPACEBAR
 **********
-SPACEBAR- Pause
 
 - [ ] **AI:**
   - [ ] **finite state machine (like patrol, chase, attack) reference: https://learn.unity.com/tutorial/pluggable-ai-with-scriptable-objects#5c7f8528edbc2a002053b48a**
