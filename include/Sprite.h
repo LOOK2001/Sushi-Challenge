@@ -39,6 +39,9 @@ public:
 	int GetCount() const { return frame_count; }
 	void SetDuration(const double duration) { frame_duration = duration; }
 	double GetDuration() const { return frame_duration; }
+	
+	virtual void SetScale(const float& _scale) { scale = _scale; }
+	virtual float GetScale() { return scale;}
 
 protected:
 	SDL_Rect frame_rect;
@@ -46,6 +49,7 @@ protected:
 	unsigned frame_count;
 	double frame_duration;
 	int last_frame_time;
+	float scale = 1;
 };
 
 #endif // SPRITE_H

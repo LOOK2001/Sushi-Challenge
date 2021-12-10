@@ -101,6 +101,7 @@ public:
 	virtual void SetHealth(const int& _health) { health = _health; }
 	virtual int GetHealth() { return health; }
 
+
 protected:
 	bool key_pressed;
 	float velocity_x;

@@ -111,3 +111,9 @@ void Image::Draw(float _x, float _y, double angle, const SDL_FPoint* _center, co
 			angle, _center, flip);
 	}
 }
+/*
+void Image:: void ScaleInPlace(float scale= 1){
+	scaled_w *= scale;
+	scaled_h *= scale
+}
+*/
