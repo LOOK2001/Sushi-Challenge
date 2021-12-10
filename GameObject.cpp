@@ -69,6 +69,12 @@ void RectObject::RenderBoxCollider(SDL_Renderer* ren)
 	SDL_FPoint pos = camera->GetPos();
 
 	SDL_FRect bb = this->GetBoxCollider();
+	if (parent)
+	{
+		SDL_FPoint pos = parent->GetGlobalPosition();
+		bb.x += pos.x;
+		bb.y += pos.y;
+	}
 
 	float x = bb.x - pos.x;
 	float y = bb.y - pos.y;
