@@ -155,7 +155,7 @@ void Application::handle_events()
 			else if(is_game_over == 1){
 				is_game_over = 0;
 			}
-			else if(is_game_over == 2){
+			else if(is_game_over >= 2){
 				is_game_over = 1;
 				is_paused = false;
 				Scene* _scene = Global::GetActiveScene();
