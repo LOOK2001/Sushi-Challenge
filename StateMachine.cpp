@@ -66,6 +66,7 @@ void EnemyStateMachine::chase()
 			float vel_x, vel_y;
 			enemy->GetInitVel(vel_x, vel_y);
 			enemy->SetVel(vel_x, vel_y);
+			enemy->translate(vel_x, vel_y);
 			SetCurrentState(EnemyState::Patrol);
 		}
 			
