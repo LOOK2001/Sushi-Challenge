@@ -22,9 +22,9 @@ void EnemyStateMachine::patrol()
 {
 	//std::cout << "patrol" << std::endl;
 
-	float velocity_x, velocity_y;
-	enemy->GetVel(velocity_x, velocity_y);
-	enemy->translate(velocity_x, velocity_y);
+	float vel_x, vel_y;
+	enemy->GetVel(vel_x, vel_y);
+	enemy->translate(vel_x, vel_y);
 
 	if (distanceDecision(enemy->GetRange()))
 	{
@@ -46,7 +46,10 @@ void EnemyStateMachine::chase()
 
 	SDL_FPoint dir{ player_pos.x - enemy_pos.x, player_pos.y - enemy_pos.y };
 	dir = Vector2D::Normal(dir);
-	enemy->translate(dir.x * 3.0, dir.y * 3.0);
+	float vel_x = dir.x * 3.0;
+	float vel_y = dir.y * 3.0;
+	enemy->SetVel(vel_x, vel_y);
+	enemy->translate(vel_x, vel_y);
 
 	if (distanceDecision(50.0))
 	{
@@ -55,9 +58,17 @@ void EnemyStateMachine::chase()
 	else
 	{
 		if (distanceDecision(enemy->GetRange() + 100))
+		{
 			SetCurrentState(EnemyState::Chase);
+		}
 		else
+		{
+			float vel_x, vel_y;
+			enemy->GetInitVel(vel_x, vel_y);
+			enemy->SetVel(vel_x, vel_y);
 			SetCurrentState(EnemyState::Patrol);
+		}
+			
 	}
 }
 

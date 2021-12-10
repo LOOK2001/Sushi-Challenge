@@ -23,6 +23,7 @@ enum ObjectType
 	BULLET,
 	ENEMY_BULLET,
 	BLAST,
+	GUN,
 	WALL,
 	DOOR,
 	LEVEL1,

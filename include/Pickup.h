@@ -12,6 +12,7 @@ class Pickup : public RectObject
 public:
 	Pickup(float _x, float _y, const char* imageName)
 	{
+		pe = nullptr;
 		sprite = new SpriteObject(1, 100.0, imageName);
 		rect.x = _x;
 		rect.y = _y;

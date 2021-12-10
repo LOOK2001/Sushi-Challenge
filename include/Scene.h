@@ -165,6 +165,12 @@ public:
 		camera->SetTarget(player);
 		objects_list.push_back(player);
 
+		// Pickup
+		Pickup* gun = new Pickup(250.0f, 200.0f, "./images/gun2.png");
+		gun->init();
+		gun->SetObjectType(ObjectType::GUN);
+		objects_list.push_back(gun);
+
 		// Enemy
 		float w = (float)map->GetTileWidth();
 		float h = (float)map->GetTileHeight();

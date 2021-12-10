@@ -29,6 +29,8 @@ public:
 	void SetRange(const float& _range) { range = _range; }
 	float GetRange() { return range; }
 
+	void GetInitVel(float& x, float& y) { x = init_velocity_x, y = init_velocity_y; };
+
 	// collision
 	virtual void CollisionResponse(GameObject* other);
 
@@ -36,6 +38,8 @@ private:
 	virtual void Decay(SDL_Renderer* ren);
 
 protected:
+	float init_velocity_x;
+	float init_velocity_y;
 	float range;
 	Player* player;
 	int start_time;

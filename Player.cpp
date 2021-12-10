@@ -17,16 +17,6 @@ void Player::init()
 		rect.h = state[current_state]->GetViewHeight();
 	}
 
-	// Weapon setup
-	weapon = new Weapon("./images/gun.png", 25, 50);
-	weapon->init();
-	float weapon_center_x = weapon->GetImgWidth() / 2.0f;
-	float weapon_center_y = weapon->GetImgHeight() / 2.0f;
-	weapon->SetMuzzlePosition({ (float)weapon->GetImgWidth() - 20.0f, weapon_center_y - 5.0f });
-	weapon->SetCenter({ weapon_center_x, weapon_center_y });
-	weapon->SetSpeed(8.0f);
-	AddChild(weapon);
-
 	// Camera effect setup
 	Camera* camera = Global::GetMainCamera();
 	camera->SetOcillationDuration(0.2f);
@@ -115,26 +105,29 @@ void Player::handle_events(SDL_Event& ev)
 	}
 	else if (ev.type == SDL_MOUSEMOTION || ev.type == SDL_MOUSEBUTTONDOWN || ev.type == SDL_MOUSEBUTTONUP)
 	{
-		// Get mouse position
-		int x, y;
-		SDL_GetMouseState(&x, &y);
-
-		if (ev.type == SDL_MOUSEMOTION)
+		if (weapon)
 		{
-			SDL_FPoint dir = GetDirectionToMouse(x, y);
+			// Get mouse position
+			int x, y;
+			SDL_GetMouseState(&x, &y);
 
-			float radian = Vector2D::Angle(dir);
-			if (radian > PI * 0.5 || radian < -PI * 0.5)
-				weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_VERTICAL);
-			else
-				weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_NONE);
-			weapon->SetAngle(radian * 180 / PI);
-		}
-		else if (ev.type == SDL_MOUSEBUTTONDOWN)
-		{
-			SDL_FPoint dir = GetDirectionToMouse(x, y);
-			weapon->Fire(dir);
-			Global::GetMainCamera()->PlayCameraShake();
+			if (ev.type == SDL_MOUSEMOTION)
+			{
+				SDL_FPoint dir = GetDirectionToMouse(x, y);
+
+				float radian = Vector2D::Angle(dir);
+				if (radian > PI * 0.5 || radian < -PI * 0.5)
+					weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_VERTICAL);
+				else
+					weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_NONE);
+				weapon->SetAngle(radian * 180 / PI);
+			}
+			else if (ev.type == SDL_MOUSEBUTTONDOWN)
+			{
+				SDL_FPoint dir = GetDirectionToMouse(x, y);
+				weapon->Fire(dir);
+				Global::GetMainCamera()->PlayCameraShake();
+			}
 		}
 	}
 
@@ -216,6 +209,18 @@ void Player::CollisionResponse(GameObject* other)
 		Global::GetActiveScene()->SwitchLevel(3);
 	}
 
+	if (objectType == ObjectType::GUN)
+	{
+		// Weapon setup
+		weapon = new Weapon("./images/gun.png", 25, 50);
+		weapon->init();
+		float weapon_center_x = weapon->GetImgWidth() / 2.0f;
+		float weapon_center_y = weapon->GetImgHeight() / 2.0f;
+		weapon->SetMuzzlePosition({ (float)weapon->GetImgWidth() - 20.0f, weapon_center_y - 5.0f });
+		weapon->SetCenter({ weapon_center_x, weapon_center_y });
+		weapon->SetSpeed(8.0f);
+		AddChild(weapon);
+	}
 }
 
 void Player::Died()

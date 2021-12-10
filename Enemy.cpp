@@ -14,8 +14,10 @@ void Enemy::init()
 	std::random_device r;
 	std::default_random_engine e1(r());
 	std::uniform_real_distribution<float> uniform_pos(-1, 1);
-	velocity_x = uniform_pos(e1);
-	velocity_y = uniform_pos(e1);
+	init_velocity_x = uniform_pos(e1);
+	init_velocity_y = uniform_pos(e1);
+	velocity_x = init_velocity_x;
+	velocity_y = init_velocity_y;
 
 	stateMachine = new EnemyStateMachine();
 	static_cast<EnemyStateMachine*>(stateMachine)->SetEnemy(this);
