@@ -121,7 +121,7 @@ public:
 		Global::SetActiveMap(map);
 
 		int offset = (map->GetTileWidth() > map->GetTileHeight()) ? map->GetTileWidth() : map->GetTileHeight();
-		camera->SetViewOffset((float)offset);
+		camera->SetViewOffset((float)offset * 2);
 
 		// Random position for coins
 		std::random_device r;
