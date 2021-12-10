@@ -40,7 +40,7 @@ private:
 	bool is_running;
 	bool is_paused;
 
-	//0 = normal; 1 = title; 2 = game over
+	//0 = normal; 1 = title; 2 = game over; victory = 3
 	int is_game_over;
 	SDL_Window* my_window;
 	SDL_Renderer* my_renderer;

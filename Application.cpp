@@ -135,6 +135,7 @@ void Application::handle_events()
 			is_running = false;
 		else if (ev.type == SDL_KEYDOWN)
 		{
+			//Enter switch statement for normal gameplay loop
 			if(is_game_over == 0)
 			{
 				switch (ev.key.keysym.sym)
@@ -152,9 +153,11 @@ void Application::handle_events()
 					}
 				}
 			}
+			//Exit Title Menu
 			else if(is_game_over == 1){
 				is_game_over = 0;
 			}
+			//Exit Game Over and Victory Screens
 			else if(is_game_over >= 2){
 				is_game_over = 1;
 				is_paused = false;
@@ -162,7 +165,6 @@ void Application::handle_events()
 				if (_scene)
 				{
 					_scene->quit();
-					//delete _scene;
 				}
 					
 				current_scene = new ExampleScene(this);
@@ -170,6 +172,7 @@ void Application::handle_events()
 				current_scene->init();
 			}
 		}
+		//Only handle events if the game is not paused
 		if(!is_paused) {
 			current_scene->handle_events(ev);
 		}
@@ -178,11 +181,13 @@ void Application::handle_events()
 
 void Application::update_mechanics()
 {
+	//Check if player is dead
 	if(Global::GetMainPlayer()->GetIsDead() == true)
 	{
 		is_game_over = 2;
 		is_paused = true;
 	}
+	//Only update when game is not paused and when we are in our normal gameplay loop
 	if(!is_paused && is_game_over == 0) {
 		current_scene->update();
 		current_scene->lateUpdate();
@@ -191,6 +196,7 @@ void Application::update_mechanics()
 
 void Application::redner()
 {
+	//Render Title Menu
 	if(is_game_over == 1)
 	{
 		SDL_SetRenderDrawColor(my_renderer, 0, 0, 0, 255);
@@ -198,6 +204,7 @@ void Application::redner()
 		title_menu->text_render(title_rect);
 		subtitle_menu->text_render(subtitle_rect);
 	}
+	//Render Game Over Menu
 	else if(is_game_over == 2)
 	{
 		current_scene->render(my_renderer);
@@ -206,16 +213,18 @@ void Application::redner()
 		gameover_menu->text_render(gameover_rect);
 		subtitle_menu->text_render(subtitle_rect);
 	}
+	//Render Victory Screen
 	else if (is_game_over == 3)
 	{
 		SDL_FPoint pos = Global::GetMainCamera()->GetPos();
 		end_background->Draw(pos.x, pos.y, 0.0, nullptr);
 	}
+	//Render normal gameplay
 	else
 	{
 		current_scene->render(my_renderer);
+		//Render Pause Menu
 		if(is_paused){
-			//render pause menu
 			pause_menu->text_render(pause_rect);
 		}
 	}

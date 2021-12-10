@@ -13,10 +13,13 @@ class TextHandler
 
     TextHandler();
 
+    //Initialize text with path to font, starting position, color, and size
     void text_init(SDL_Renderer* renderer, const char* fpath, int x_start, int y_start, SDL_Color start_color, int size);
 
+    //Update text with string that will be displayed
     void text_update(const char* charString);
 
+    //Render our text as an image
     void text_render(SDL_Rect pause_rect);
 
     private:
