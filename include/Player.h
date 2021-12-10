@@ -12,6 +12,7 @@ public:
 	Player(float x, float y, const char* imageName = nullptr) :
 		Character(x, y, imageName)
 	{
+		weapon = nullptr;
 		key_pressed = false;
 		SetPosition(x, y);
 		velocity_x = 0.0f;
@@ -50,10 +51,14 @@ private:
 
 private:
 	int full_health;
+	// For collision response
+	int move_direction;
 	int score;
 	bool is_dead;
 	Weapon* weapon;
 	HealthBar* health_bar;
+	float speed_y;
+	float speed_x;
 };
 
 #endif	//PLAYER_H

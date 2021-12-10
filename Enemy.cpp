@@ -10,6 +10,15 @@ void Enemy::init()
 
 	health = 100;
 
+	// Random position for coins
+	std::random_device r;
+	std::default_random_engine e1(r());
+	std::uniform_real_distribution<float> uniform_pos(-1, 1);
+	init_velocity_x = uniform_pos(e1);
+	init_velocity_y = uniform_pos(e1);
+	velocity_x = init_velocity_x;
+	velocity_y = init_velocity_y;
+
 	stateMachine = new EnemyStateMachine();
 	static_cast<EnemyStateMachine*>(stateMachine)->SetEnemy(this);
 	stateMachine->SetCurrentState(EnemyStateMachine::EnemyState::Patrol);
@@ -87,18 +96,23 @@ void Enemy::CollisionResponse(GameObject* other)
 	if (!active)
 		return;
 
-	if (other->GetType() == ObjectType::BULLET)
+	if (other->GetObjectType() == ObjectType::BULLET)
 	{
 		if (health <= 0)
 		{
 			DeleteObject(this);
 		}
 
-		//Scene* active_scene = Global::GetActiveScene();
 		SetHitColor(255, 255, 255, 255);
 
 		health -= 100;
 		DeleteObject(other);
+	}
+
+	if (other->GetObjectType() == ObjectType::WALL || other->GetObjectType() == ObjectType::DOOR)
+	{
+		SetVel(-velocity_x, -velocity_y);
+		translate(velocity_x, velocity_y);
 	}
 }
 
@@ -172,18 +186,22 @@ void SushiBoss::CollisionResponse(GameObject* other)
 	if (!active)
 		return;
 
-	if (other->GetType() == ObjectType::BULLET)
+	if (other->GetObjectType() == ObjectType::BULLET)
 	{
-		if (health <= 0)
-		{
-			DeleteObject(this);
-		}
-
-		//Scene* active_scene = Global::GetActiveScene();
 		SetHitColor(255, 255, 255, 255);
 
 		health -= 10;
 		DeleteObject(other);
+
+		if (health <= 0)
+		{
+			SDL_FPoint pos = GetGlobalPosition();
+			Portal* portal = new Portal(pos.x + 100, pos.y, "./images/Portal.png");
+			portal->init();
+			AddInstance(portal);
+
+			DeleteObject(this);
+		}
 	}
 }
 

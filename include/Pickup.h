@@ -12,6 +12,7 @@ class Pickup : public RectObject
 public:
 	Pickup(float _x, float _y, const char* imageName)
 	{
+		pe = nullptr;
 		sprite = new SpriteObject(1, 100.0, imageName);
 		rect.x = _x;
 		rect.y = _y;
@@ -38,4 +39,17 @@ private:
 	SpriteObject* sprite;
 	ParticleEmitter* pe;
 };
+
+
+class Portal : public Pickup
+{
+public:
+	Portal(float _x, float _y, const char* imageName) :
+		Pickup(_x, _y, imageName)
+	{}
+
+	// collision
+	virtual void CollisionResponse(GameObject* other);
+};
+
 #endif //PICKUP_H

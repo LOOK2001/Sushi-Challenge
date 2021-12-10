@@ -22,7 +22,13 @@ enum ObjectType
 	PICKUP,
 	BULLET,
 	ENEMY_BULLET,
-	BLAST
+	BLAST,
+	GUN,
+	WALL,
+	DOOR,
+	LEVEL1,
+	LEVEL2,
+	LEVEL3
 };
 
 
@@ -65,7 +71,7 @@ public:
 			children[i]->quit();
 	}
 
-	virtual ObjectType GetType() const { return type; }
+	virtual ObjectType GetObjectType() const { return type; }
 	virtual void SetObjectType(const ObjectType _type) { type = _type; }
 
 	bool GetActive() const { return active; }

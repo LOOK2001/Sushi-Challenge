@@ -14,7 +14,7 @@ public:
 		srand(35);
 		velocity_x = velocity_y = 1.0f;
 		player = nullptr;
-		range = 300.0f;
+		range = 250.0f;
 		start_time = 0;
 		last_time = 0;
 		decayrate = 0.95f;
@@ -29,6 +29,8 @@ public:
 	void SetRange(const float& _range) { range = _range; }
 	float GetRange() { return range; }
 
+	void GetInitVel(float& x, float& y) { x = init_velocity_x, y = init_velocity_y; };
+
 	// collision
 	virtual void CollisionResponse(GameObject* other);
 
@@ -36,6 +38,8 @@ private:
 	virtual void Decay(SDL_Renderer* ren);
 
 protected:
+	float init_velocity_x;
+	float init_velocity_y;
 	float range;
 	Player* player;
 	int start_time;
@@ -65,13 +69,6 @@ public:
 
 	// collision
 	virtual void CollisionResponse(GameObject* other);
-
-	void FindPlayer()
-	{
-		// Initialize the open and closed list
-		std::vector<int> open_list;
-		std::vector<int> closed_list;
-	}
 
 private:
 	virtual void Decay(SDL_Renderer* ren);

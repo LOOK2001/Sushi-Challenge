@@ -60,7 +60,7 @@ void Image::load_image(const char* name)
 	view = { 0, 0, surface->w, surface->h };
 }
 
-void Image::Draw(float _x, float _y, float scale) const
+void Image::Draw(float _x, float _y, float scale, bool clip) const
 {
 	Camera* camera = Global::GetMainCamera();
 	SDL_FPoint pos = camera->GetPos();
@@ -71,14 +71,22 @@ void Image::Draw(float _x, float _y, float scale) const
 	//SDL_FRect dest = { (float)x, (float)y, view.w * scale, view.h * scale };
 	//SDL_RenderCopyF(renderer, texture, &view, &dest);
 
-	if (camera->IsInsideView(x, y))
+	if (clip)
+	{
+		if (camera->IsInsideView(x, y))
+		{
+			SDL_FRect dest = { (float)x, (float)y, view.w * scale, view.h * scale };
+			SDL_RenderCopyF(renderer, texture, &view, &dest);
+		}
+	}
+	else 
 	{
 		SDL_FRect dest = { (float)x, (float)y, view.w * scale, view.h * scale };
 		SDL_RenderCopyF(renderer, texture, &view, &dest);
 	}
 }
 
-void Image::Draw(float _x, float _y, double angle, const SDL_FPoint* _center, const SDL_RendererFlip flip /*= SDL_FLIP_NONE*/, float scale /*= 1*/) const
+void Image::Draw(float _x, float _y, double angle, const SDL_FPoint* _center, const SDL_RendererFlip flip /*= SDL_FLIP_NONE*/, float scale /*= 1*/, bool clip) const
 {
 	Camera* camera = Global::GetMainCamera();
 	SDL_FPoint pos = camera->GetPos();
@@ -86,9 +94,22 @@ void Image::Draw(float _x, float _y, double angle, const SDL_FPoint* _center, co
 	float x = _x * scale - pos.x;
 	float y = _y * scale - pos.y;
 
-	SDL_FRect dest = { (float)x, (float)y, view.w * scale, view.h * scale };
-	SDL_RenderCopyExF(renderer, texture, &view, &dest,
-		angle, _center, flip);
+	if (clip)
+	{
+		if (camera->IsInsideView(x, y))
+		{
+			SDL_FRect dest = { (float)x, (float)y, view.w * scale, view.h * scale };
+			SDL_RenderCopyExF(renderer, texture, &view, &dest,
+				angle, _center, flip);
+		}
+
+	}
+	else
+	{
+		SDL_FRect dest = { (float)x, (float)y, view.w * scale, view.h * scale };
+		SDL_RenderCopyExF(renderer, texture, &view, &dest,
+			angle, _center, flip);
+	}
 }
 /*
 void Image:: void ScaleInPlace(float scale= 1){

@@ -1,5 +1,6 @@
 #include "include/Pickup.h"
 #include "include/Scene.h"
+#include "include/Utils.h"
 
 void Pickup::init()
 {
@@ -21,7 +22,7 @@ void Pickup::render(SDL_Renderer* ren)
 	if (!active)
 		return;
 
-	sprite->Draw(rect.x, rect.y, 2);
+	sprite->Draw(rect.x, rect.y, 1);
 
 	RectObject::render(ren);
 }
@@ -38,7 +39,7 @@ void Pickup::CollisionResponse(GameObject* other)
 	if (!active)
 		return;
 
-	if (other->GetType() == ObjectType::BULLET)
+	if (other->GetObjectType() == ObjectType::PLAYER)
 	{
 		Scene* active_scene = Global::GetActiveScene();
 		SDL_Renderer* my_renderer = Global::GetRenderer();
@@ -55,5 +56,14 @@ void Pickup::CollisionResponse(GameObject* other)
 
 		collidable = false;
 		active = false;
+	}
+}
+
+void Portal::CollisionResponse(GameObject* other)
+{
+	if (other->GetObjectType() == ObjectType::PLAYER)
+	{
+		Global::GetActiveScene()->GameEnd();
+		SetActive(false);
 	}
 }

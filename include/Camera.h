@@ -3,6 +3,7 @@
 #define CAMERA_H
 
 #include <iostream>
+#include <unordered_map>
 
 #include <SDL2/SDL.h>
 
@@ -25,8 +26,53 @@ public:
 	virtual void update();
 	virtual void lateUpdate();
 
-	bool IsInsideView(const float x, const float y) const
+	bool IsInsideView(const float x, const float y)
 	{
+		// World space
+		SDL_FPoint _pos = GetPos();
+		float world_x = x + _pos.x;
+		float world_y = y + _pos.y;
+
+		if (currentLevel != 0)
+		{
+			SDL_FRect area = GetLevelArea(currentLevel)[0];
+			if (currentLevel == 1)
+			{
+				if (!(world_x >= area.x && world_x <= area.x + area.w &&
+					world_y >= area.y && world_y <= area.y+ area.h))
+					return false;
+			}
+			else if (currentLevel == 2)
+			{
+				if (!(world_x >= area.x && world_x <= area.x + area.w &&
+					world_y >= area.y && world_y <= area.y + area.h))
+					return false;
+			}
+			else if (currentLevel == 3)
+			{
+				if (!(world_x >= area.x && world_x <= area.x + area.w &&
+					world_y >= area.y && world_y <= area.y + area.h))
+					return false;
+			}
+		}
+		else if(currentLevel == 0) {
+				std::vector<SDL_FRect> areas = GetLevelArea(currentLevel);
+				bool flag = false;
+				for (size_t i = 0; i < areas.size(); i++)
+				{
+					SDL_FRect area = areas[i];
+					if ((world_x >= area.x && world_x <= area.x + area.w &&
+						world_y >= area.y && world_y <= area.y + area.h))
+					{
+						flag = true;
+						break;
+					}
+						
+				}
+				if (!flag)
+					return false;
+		}
+
 		float min_x = -offset;
 		float max_x = camera_rect.w + offset;
 		float min_y = -offset;
@@ -58,6 +104,12 @@ public:
 
 	void SetTargetOffset(const SDL_FPoint& offset) { target_offset = offset; }
 	SDL_FPoint GetTargetOffset() { return target_offset; }
+
+	void SetCurrentLevel(const int& level) { currentLevel = level; }
+	int GetCurrentLevel() const { return currentLevel; }
+
+	void InsertLevelArea(const int& levelIdx, SDL_FRect area);
+	const std::vector<SDL_FRect>& GetLevelArea (const int& levelIdx);
 	
 	// Camera Shake
 	void PlayCameraShake();
@@ -77,6 +129,8 @@ private:
 	bool play_oscillation;
 	float oscillation_duration;
 	float oscillation_amplitude;
+	int currentLevel;
+	std::unordered_map<int, std::vector<SDL_FRect>> level_area;
 };
 
 #endif //CAMERA_H

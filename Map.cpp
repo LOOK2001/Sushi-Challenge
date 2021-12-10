@@ -1,8 +1,10 @@
 
 #include <fstream>
 #include <sstream>
+#include <utility>
 
 #include "include/Map.h"
+#include "include/Utils.h"
 
 
 void Map::LoadMap(const char* _file_name)
@@ -10,23 +12,44 @@ void Map::LoadMap(const char* _file_name)
 	if (!_file_name)
 		return;
 
+	if (!tileSheet)
+		std::cout << "Please load tile sheet first" << std::endl;
+
 	map_file_name = _file_name;
 	std::vector<std::vector<int>> _map;
 	std::ifstream infile(_file_name);
 
 	std::string line;
+	int i, j;
+	i = j = 0;
+	int width = tileSheet->GetTileWidth() * scale_factor;
+	int height = tileSheet->GetTileHeight() * scale_factor;
 	while (std::getline(infile, line))
 	{
 		std::istringstream iss(line);
 
 		std::string tile_index;
 		std::vector<int> tile_line;
+		i = 0;
 		while (iss >> tile_index)
 		{
 			int index = std::stoi(tile_index);
+
+			// If the index is wall, create a box collider
+			if (index >=2 && index <= 10)
+			{
+				RectObject* wall = new RectObject(i * width, j * height, width, height);
+				wall->init();
+				wall->SetObjectType(ObjectType::WALL);
+				if (index == 2)
+					wall->SetObjectType(ObjectType::DOOR);
+				AddInstance(wall);
+			}
 			tile_line.push_back(index);
+			i++;
 		}
 		_map.push_back(tile_line);
+		j++;
 	}
 
 	if (!_map.empty())

@@ -20,6 +20,8 @@ public:
 	TileSheet(const char* tile_name = nullptr, const int _rows = 1, const int _cols = 1) :
 		columns(_cols), rows(_rows)
 	{
+		tileSet = nullptr;
+
 		if (tile_name)
 			LoadTileSet(tile_name, rows, columns);
 	}
@@ -28,8 +30,8 @@ public:
 		if (tileSet)
 			delete tileSet;
 
-		for (auto img : tiles)
-			delete img;
+		for (size_t i = 0; i < tiles.size(); i++)
+			delete tiles[i];
 	}
 
 	Image* GetTile(int index) const

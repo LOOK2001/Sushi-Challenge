@@ -17,16 +17,6 @@ void Player::init()
 		rect.h = state[current_state]->GetViewHeight();
 	}
 
-	// Weapon setup
-	weapon = new Weapon("./images/gun.png", 50, 100);
-	weapon->init();
-	float weapon_center_x = weapon->GetImgWidth() / 2.0f;
-	float weapon_center_y = weapon->GetImgHeight() / 2.0f;
-	weapon->SetMuzzlePosition({ (float)weapon->GetImgWidth() - 20.0f, weapon_center_y - 5.0f });
-	weapon->SetCenter({ weapon_center_x, weapon_center_y });
-	weapon->SetSpeed(8.0f);
-	AddChild(weapon);
-
 	// Camera effect setup
 	Camera* camera = Global::GetMainCamera();
 	camera->SetOcillationDuration(0.2f);
@@ -50,7 +40,7 @@ void Player::render(SDL_Renderer* ren)
 	if (current_state.compare("none") == 0)
 		return;
 
-	state[current_state]->Draw(rect.x, rect.y, 0.0, NULL, flip_sprite, state[current_state]->GetScale());
+	state[current_state]->Draw(rect.x, rect.y, 0.0, NULL, flip_sprite, 1, false);
 
 	Character::render(ren);
 }
@@ -60,24 +50,50 @@ void Player::handle_events(SDL_Event& ev)
 	if (ev.type == SDL_KEYDOWN)
 	{
 		key_pressed = true;
+		const Uint8* state = SDL_GetKeyboardState(NULL);
+		speed_y = speed_x = 0.0f;
+
 		switch (ev.key.keysym.sym)
 		{
 		case SDLK_a:
-			translate(-speed, 0);
+			speed_x = -speed;
+			if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_S]) {
+				speed_x *= 0.5;
+				speed_y = (state[SDL_SCANCODE_W] != 0) ? speed * -0.5 : speed * 0.5;
+			}
 			flip_sprite = SDL_FLIP_HORIZONTAL;
 			SwitchState("walk");
+			translate(speed_x, speed_y);
 			break;
+
 		case SDLK_d:
+			speed_x = speed;
+			if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_S]) {
+				speed_x *= 0.5;
+				speed_y = (state[SDL_SCANCODE_W] != 0) ? speed * -0.5 : speed * 0.5;
+			}
 			flip_sprite = SDL_FLIP_NONE;
 			SwitchState("walk");
-			translate(speed, 0);
+			translate(speed_x, speed_y);
 			break;
+
 		case SDLK_w:
-			translate(0, -speed);
+			speed_y = -speed;
+			if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_D]) {
+				speed_y = speed * -0.5;
+				speed_x = (state[SDL_SCANCODE_D] != 0) ? speed * 0.5 : speed * -0.5;
+			}
+			translate(speed_x, speed_y);
 			SwitchState("walk");
 			break;
+
 		case SDLK_s:
-			translate(0, speed);
+			speed_y = speed;
+			if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_D]) {
+				speed_y *= 0.5;
+				speed_x = (state[SDL_SCANCODE_D] != 0) ? speed * 0.5 : speed * -0.5;
+			}
+			translate(speed_x, speed_y);
 			SwitchState("walk");
 			break;
 		}
@@ -89,26 +105,29 @@ void Player::handle_events(SDL_Event& ev)
 	}
 	else if (ev.type == SDL_MOUSEMOTION || ev.type == SDL_MOUSEBUTTONDOWN || ev.type == SDL_MOUSEBUTTONUP)
 	{
-		// Get mouse position
-		int x, y;
-		SDL_GetMouseState(&x, &y);
-
-		if (ev.type == SDL_MOUSEMOTION)
+		if (weapon)
 		{
-			SDL_FPoint dir = GetDirectionToMouse(x, y);
+			// Get mouse position
+			int x, y;
+			SDL_GetMouseState(&x, &y);
 
-			float radian = Vector2D::Angle(dir);
-			if (radian > PI * 0.5 || radian < -PI * 0.5)
-				weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_VERTICAL);
-			else
-				weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_NONE);
-			weapon->SetAngle(radian * 180 / PI);
-		}
-		else if (ev.type == SDL_MOUSEBUTTONDOWN)
-		{
-			SDL_FPoint dir = GetDirectionToMouse(x, y);
-			weapon->Fire(dir);
-			Global::GetMainCamera()->PlayCameraShake();
+			if (ev.type == SDL_MOUSEMOTION)
+			{
+				SDL_FPoint dir = GetDirectionToMouse(x, y);
+
+				float radian = Vector2D::Angle(dir);
+				if (radian > PI * 0.5 || radian < -PI * 0.5)
+					weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_VERTICAL);
+				else
+					weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_NONE);
+				weapon->SetAngle(radian * 180 / PI);
+			}
+			else if (ev.type == SDL_MOUSEBUTTONDOWN)
+			{
+				SDL_FPoint dir = GetDirectionToMouse(x, y);
+				weapon->Fire(dir);
+				Global::GetMainCamera()->PlayCameraShake();
+			}
 		}
 	}
 
@@ -135,7 +154,10 @@ void Player::UpdateHealthBar(int _health)
 
 void Player::CollisionResponse(GameObject* other)
 {
-	if (other->GetType() == ObjectType::ENEMY_BULLET || other->GetType() == ObjectType::BLAST)
+	ObjectType objectType = other->GetObjectType();
+	if (objectType == ObjectType::ENEMY_BULLET ||
+		objectType == ObjectType::BLAST ||
+		objectType == ObjectType::WALL)
 	{
 
 		if (health <= 0)
@@ -145,9 +167,9 @@ void Player::CollisionResponse(GameObject* other)
 		}
 		else
 		{
-			if (other->GetType() == ObjectType::ENEMY_BULLET)
+			if (other->GetObjectType() == ObjectType::ENEMY_BULLET)
 			{
-				health -= 20;
+				health -= 2;
 				if (health <= 0)
 				{
 					UpdateHealthBar(0);
@@ -157,9 +179,9 @@ void Player::CollisionResponse(GameObject* other)
 				other->SetCollidable(false);
 				DeleteObject(other);
 			}
-			else if (other->GetType() == ObjectType::BLAST)
+			else if (other->GetObjectType() == ObjectType::BLAST)
 			{
-				health -= 40;
+				health -= 5;
 				if (health <= 0)
 				{
 					UpdateHealthBar(0);
@@ -169,6 +191,35 @@ void Player::CollisionResponse(GameObject* other)
 				UpdateHealthBar(health);
 			}
 		}
+	}
+	if (objectType == ObjectType::WALL)
+	{
+		translate(-speed_x, -speed_y);
+	}
+	if (objectType == ObjectType::LEVEL1)
+	{
+		Global::GetActiveScene()->SwitchLevel(1);
+	}
+	else if (objectType == ObjectType::LEVEL2)
+	{
+		Global::GetActiveScene()->SwitchLevel(2);
+	}
+	else if (objectType == ObjectType::LEVEL3)
+	{
+		Global::GetActiveScene()->SwitchLevel(3);
+	}
+
+	if (objectType == ObjectType::GUN)
+	{
+		// Weapon setup
+		weapon = new Weapon("./images/gun.png", 25, 50);
+		weapon->init();
+		float weapon_center_x = weapon->GetImgWidth() / 2.0f;
+		float weapon_center_y = weapon->GetImgHeight() / 2.0f;
+		weapon->SetMuzzlePosition({ (float)weapon->GetImgWidth() - 20.0f, weapon_center_y - 5.0f });
+		weapon->SetCenter({ weapon_center_x, weapon_center_y });
+		weapon->SetSpeed(8.0f);
+		AddChild(weapon);
 	}
 }
 
