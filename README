@@ -1,0 +1,34 @@
+Sushi Challenge
+
+Team: 
+Xicheng Wang,
+Mohan Foh,
+Nathan Frye
+
+-------------------
+
+The player is a sushi chef who are trapped in a dungeon by a Evil Sushi. That Evil Sushi doesn't want to be food anymore.
+Food (cucumber, carrot, rice, salmon, etc.) begin attacking him. The sushi chef need to defeat different food and collect them to make them to a sushi (points)
+Finally, the sushi chef need to defeat the Evil Sushi boss and collect a amount of sushi to run away.
+
+Instructions to compile and run:
+compile: make
+run: ./my_gmae
+
+Directions:
+Up        - W 
+Left      - A
+Down      - S 
+Right     - D 
+Shoot Gun - Left-click
+Pause     - SPACEBAR
+
+What we did in Sushi Challenge:
+-Finite state machine to control NPC
+-Start/Finish screens
+-In-play UI (health bar)
+-Textual items with fonts (Title/Finish/Pause screen)
+-Simple level editor (read a txt file (include/map.txt) to generate the tilemap)
+
+Resource:
+Tile map -> [https://pixanna.nl/materials/celiannas-tileset/]
