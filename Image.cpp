@@ -65,12 +65,11 @@ void Image::Draw(float _x, float _y, float scale, bool clip) const
 	Camera* camera = Global::GetMainCamera();
 	SDL_FPoint pos = camera->GetPos();
 
+	// Calculate the world space position
 	float x = _x - pos.x;
 	float y = _y - pos.y;
 
-	//SDL_FRect dest = { (float)x, (float)y, view.w * scale, view.h * scale };
-	//SDL_RenderCopyF(renderer, texture, &view, &dest);
-
+	// If the clip needed
 	if (clip)
 	{
 		if (camera->IsInsideView(x, y))
@@ -91,9 +90,11 @@ void Image::Draw(float _x, float _y, double angle, const SDL_FPoint* _center, co
 	Camera* camera = Global::GetMainCamera();
 	SDL_FPoint pos = camera->GetPos();
 
+	// Calculate the world space position
 	float x = _x * scale - pos.x;
 	float y = _y * scale - pos.y;
 
+	// If the clip needed
 	if (clip)
 	{
 		if (camera->IsInsideView(x, y))
@@ -111,9 +112,3 @@ void Image::Draw(float _x, float _y, double angle, const SDL_FPoint* _center, co
 			angle, _center, flip);
 	}
 }
-/*
-void Image:: void ScaleInPlace(float scale= 1){
-	scaled_w *= scale;
-	scaled_h *= scale
-}
-*/

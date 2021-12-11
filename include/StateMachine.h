@@ -10,33 +10,16 @@
 #include <SDL2/SDL_timer.h>
 
 
-
-class StateMachine;
-class State
-{
-public:
-	void UpdateState(StateMachine* controller)
-	{
-		DoActions(controller);
-		CheckTransitions(controller);
-	}
-
-	void DoActions(StateMachine* controller) {};
-
-private:
-	void CheckTransitions(StateMachine* controller) {};
-};
-
 typedef std::function<void()> stateFunction;
 typedef std::unordered_map<int, std::function<void()>> stateMap;
 
+// Base class for State Machine
 class StateMachine
 {
 public:
 	virtual void init() {}
 	virtual void update()
 	{
-		//currentState->UpdateState(this);
 		auto iter = states_map.find(currentState);
 		if (iter == states_map.end())
 		{
@@ -58,12 +41,8 @@ protected:
 };
 
 
-class Patrol : public State
-{
-
-};
-
 class Enemy;
+// State Machine for Enemy
 class EnemyStateMachine : public StateMachine
 {
 public:

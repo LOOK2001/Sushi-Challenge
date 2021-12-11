@@ -10,13 +10,7 @@
 #include "Weapon.h"
 
 
-enum CtrlMode
-{
-	POSITION,
-	VELOCITY
-};
-
-
+// Class to display the health bar
 class HealthBar : public RectFillObject
 {
 public:
@@ -54,12 +48,12 @@ private:
 };
 
 
+// Base class for movable character like enemy and player
 class Character : public RectObject
 {
 public:
 	Character(float x, float y, const char* imageName = nullptr)
 	{
-		key_pressed = false;
 		SetPosition(x, y);
 		velocity_x = 0.0f;
 		velocity_x = 0.f;
@@ -88,6 +82,7 @@ public:
 	virtual void SwitchState(std::string _state);
 	virtual void SetDefaultState(std::string _state);
 
+	// The velocity will be used by the enemy
 	virtual void SetVel(const float x, const float y)
 	{
 		velocity_x = x;
@@ -95,6 +90,7 @@ public:
 	};
 	virtual void GetVel(float& x, float& y) { x = velocity_x, y = velocity_y; };
 
+	// The speed will be used by the player
 	virtual void SetSpeed(const float& _speed) { speed = _speed; }
 	virtual float GetSpeed() const { return speed; }
 
@@ -103,7 +99,6 @@ public:
 
 
 protected:
-	bool key_pressed;
 	float velocity_x;
 	float velocity_y;
 	SDL_RendererFlip flip_sprite;

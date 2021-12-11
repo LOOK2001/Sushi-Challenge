@@ -1,4 +1,3 @@
-// Class that maintaining map data
 #ifndef MAP_H
 #define MAP_H
 
@@ -6,6 +5,7 @@
 #include "TileHandler.h"
 
 
+// Class that maintaining map data
 class Map : public GameObject
 {
 public:
@@ -28,7 +28,9 @@ public:
 	virtual void init();
 	virtual void render(SDL_Renderer* ren);
 
+	// Read the map index
 	void LoadMap(const char* file_name);
+	// Read the map tileset resource
 	void LoadTiles(const char* file_name, const int _rows = 1, const int _cols = 1);
 
 	TileSheet* GetTileSheet() const { return tileSheet; }
@@ -42,7 +44,7 @@ private:
 	std::string map_file_name;
 	std::string tiles_file_name;
 	std::vector<std::vector<int>> map;
-	TileSheet* tileSheet;
+	TileSheet* tileSheet;			// Tile sheet stores each tile as a image
 	float scale_factor;
 };
 

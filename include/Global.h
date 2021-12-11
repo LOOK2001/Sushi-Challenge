@@ -14,7 +14,7 @@ class Scene;
 class Map;
 class Player;
 
-// Global class hold global setting, such as renderer and window
+// Global class holds global setting, such as renderer and window
 class Global
 {
 public:

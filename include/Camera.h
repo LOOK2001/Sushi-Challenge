@@ -1,5 +1,4 @@
-﻿// Class the stores the view of player such as position and width and height
-#ifndef CAMERA_H
+﻿#ifndef CAMERA_H
 #define CAMERA_H
 
 #include <iostream>
@@ -12,6 +11,7 @@
 #include "Image.h"
 
 
+// Class the stores the view of player such as position and width and height
 class Camera : public GameObject
 {
 public:
@@ -52,6 +52,7 @@ public:
 	void SetCurrentLevel(const int& level) { currentLevel = level; }
 	int GetCurrentLevel() const { return currentLevel; }
 
+	// Level rect to mask
 	void InsertLevelArea(const int& levelIdx, SDL_FRect area);
 	const std::vector<SDL_FRect>& GetLevelArea (const int& levelIdx);
 	
@@ -64,12 +65,11 @@ public:
 	
 private:
 	GameObject* target;
-	SDL_FPoint target_offset;
-	float smooth_speed;
+	SDL_FPoint target_offset;		// Target offset is the offset between target and camera
 	SDL_FRect camera_rect;
 	int start_time;
 	int current_time;
-	float offset;
+	float offset;					// Offset is to clip
 	bool play_oscillation;
 	float oscillation_duration;
 	float oscillation_amplitude;

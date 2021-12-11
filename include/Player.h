@@ -4,8 +4,7 @@
 #include "Character.h"
 
 
-// Player Declaration:
-// Base class for movable character
+// Player class
 class Player : public Character
 {
 public:
@@ -13,7 +12,6 @@ public:
 		Character(x, y, imageName)
 	{
 		weapon = nullptr;
-		key_pressed = false;
 		SetPosition(x, y);
 		velocity_x = 0.0f;
 		velocity_x = 0.f;
@@ -51,8 +49,7 @@ private:
 
 private:
 	int full_health;
-	// For collision response
-	int move_direction;
+	int move_direction;				// For collision response
 	int score;
 	bool is_dead;
 	Weapon* weapon;

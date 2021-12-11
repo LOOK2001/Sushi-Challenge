@@ -150,15 +150,14 @@ public:
 
 	virtual SDL_FPoint GetGlobalPosition() const;
 
-	virtual void translate(const float x, const float y);
-	virtual void rotate(float angle, SDL_FPoint p);
+	virtual void Translate(const float x, const float y);
+	virtual void Rotate(float angle, SDL_FPoint p);
 	virtual SDL_FRect GetBoxCollider();
 	virtual SDL_FPoint GetCircleColliderCenter() const;
 	virtual bool IsCollideWith_Box(GameObject* dest);
 	virtual bool IsCollideWith_Sphere(GameObject* dest);
 
 protected:
-	//SDL_Texture* texture;
 	std::vector<GameObject*> children;
 	SDL_FRect rect;
 };
@@ -220,8 +219,8 @@ public:
 	void SetWidth(const float w) { rect.w = w; }
 	void SetHeight(const float h) { rect.h = h; }
 
-	void translate(const float x, const float y);
-	void rotate(float angle, SDL_FPoint _center);
+	void Translate(const float x, const float y);
+	void Rotate(float angle, SDL_FPoint _center);
 
 private:
 	SDL_Color color;

@@ -18,12 +18,15 @@ void Map::LoadMap(const char* _file_name)
 	map_file_name = _file_name;
 	std::vector<std::vector<int>> _map;
 	std::ifstream infile(_file_name);
-
 	std::string line;
+
 	int i, j;
 	i = j = 0;
+
+	// Width and height for each tile
 	int width = tileSheet->GetTileWidth() * scale_factor;
 	int height = tileSheet->GetTileHeight() * scale_factor;
+
 	while (std::getline(infile, line))
 	{
 		std::istringstream iss(line);

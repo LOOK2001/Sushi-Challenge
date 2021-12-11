@@ -31,50 +31,6 @@ void Enemy::update()
 {
 	stateMachine->update();
 
-	//float pos_x = rect.x + rect.w * 0.5;
-	//float pos_y = rect.y + rect.h * 0.5;
-
-	//// Prevent player from moving out the screen
-	//if (pos_x >= Global::GetWindowWidth() || pos_x <= 0.0f)
-	//	velocity_x = -velocity_x;
-
-	//if (pos_y >= Global::GetWindowHeight() || pos_y <= 0.0f)
-	//	velocity_y = -velocity_y;
-
-	//srand((int)pos_x * 10);
-
-	//velocity_x += ((float)rand() / (float)RAND_MAX - 0.5f) * 0.1f;
-	//velocity_y += ((float)rand() / (float)RAND_MAX - 0.5f) * 0.1f;
-
-	//translate(velocity_x, velocity_y);
-
-	//// Check if the player close enough
-	//if (player)
-	//{
-	//	float distance = Vector2D::Distance(player->GetGlobalPosition(), GetGlobalPosition());
-	//	if (distance < range)
-	//	{
-	//		// Attack the player
-	//		SDL_FPoint self_pos = GetGlobalPosition();
-	//		SDL_FPoint player_pos = player->GetGlobalPosition();
-
-	//		SDL_FPoint dir{ player_pos.x - self_pos.x, player_pos.y - self_pos.y };
-	//		dir = Vector2D::Normal(dir);
-
-	//		start_time = SDL_GetTicks();
-	//		if (start_time >= (last_time + 600)) {
-	//			last_time = start_time;
-
-	//			Bullet* bullet = new Bullet("./images/particle2.png", self_pos.x, self_pos.y);
-	//			bullet->init();
-	//			bullet->SetDirection(dir);
-	//			bullet->SetSpeed(2.0f);
-	//			bullet->SetObjectType(ObjectType::ENEMY_BULLET);
-	//			AddInstance(bullet);
-	//		}
-	//	}
-	//}
-
 	Character::update();
 }
 
@@ -114,7 +70,7 @@ void Enemy::CollisionResponse(GameObject* other)
 	if (other->GetObjectType() == ObjectType::WALL || other->GetObjectType() == ObjectType::DOOR)
 	{
 		SetVel(-velocity_x, -velocity_y);
-		translate(velocity_x, velocity_y);
+		Translate(velocity_x, velocity_y);
 	}
 }
 
@@ -126,6 +82,7 @@ void Enemy::Decay(SDL_Renderer* ren)
 		return;
 	}
 
+	// If getting hurt
 	SwitchState("hurt");
 
 	hit_color[0] *= decayrate;
@@ -144,6 +101,7 @@ void Enemy::Decay(SDL_Renderer* ren)
 	float x = bb.x - pos.x;
 	float y = bb.y - pos.y;
 
+	// Draw hit color
 	SDL_SetRenderDrawColor(ren, hit_color[0], hit_color[1], hit_color[2], hit_color[3]);
 	SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND);
 
@@ -197,6 +155,7 @@ void SushiBoss::CollisionResponse(GameObject* other)
 
 		if (health <= 0)
 		{
+			// Create portal
 			SDL_FPoint pos = GetGlobalPosition();
 			Portal* portal = new Portal(pos.x + 100, pos.y, "./images/Portal.png");
 			portal->init();
@@ -216,6 +175,7 @@ void SushiBoss::Decay(SDL_Renderer* ren)
 		return;
 	}
 
+	// If getting hurt
 	SwitchState("hurt");
 
 	hit_color[0] *= decayrate;
@@ -234,6 +194,7 @@ void SushiBoss::Decay(SDL_Renderer* ren)
 	float x = bb.x - pos.x;
 	float y = bb.y - pos.y;
 
+	// Draw hit color
 	SDL_SetRenderDrawColor(ren, hit_color[0], hit_color[1], hit_color[2], hit_color[3]);
 	SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND);
 

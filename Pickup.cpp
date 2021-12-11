@@ -39,6 +39,7 @@ void Pickup::CollisionResponse(GameObject* other)
 	if (!active)
 		return;
 
+	// If the player collide with the pickup, then destroy the pickup and play the particle emitter
 	if (other->GetObjectType() == ObjectType::PLAYER)
 	{
 		Scene* active_scene = Global::GetActiveScene();

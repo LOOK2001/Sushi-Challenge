@@ -11,7 +11,7 @@ void Particle::init(const char* graphics, SDL_Renderer* ren, int start_x, int st
 
 void Particle::update()
 {
-	translate(x_vel, y_vel);
+	Translate(x_vel, y_vel);
 
 	// 100 pixels meter
 	//y_vel += 9.8 * 100.0 / 3600.0;

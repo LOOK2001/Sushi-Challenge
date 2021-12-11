@@ -9,6 +9,7 @@ void TileSheet::LoadTileSet(const char* tile_name, const int _rows, const int _c
 
 	tileSet = new Image(tile_name);
 	
+	// Rows and columns for the tileset
 	rows = _rows;
 	columns = _cols;
 
@@ -25,6 +26,7 @@ void TileSheet::LoadTileSet(const char* tile_name, const int _rows, const int _c
 
 	for (auto i = 0; i < total_tiles; i++)
 	{
+		// Create tile object using image class
 		Image* tile = new Image(tileSet->GetSurface(), x, y, tile_width, tile_height);
 		tiles.push_back(tile);
 

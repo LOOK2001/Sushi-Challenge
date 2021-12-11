@@ -6,6 +6,8 @@
 
 #define MAX_PARTS 10
 
+
+// Class that maintaining particles
 class ParticleEmitter : public GameObject {
 
 public:

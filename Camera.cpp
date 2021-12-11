@@ -5,7 +5,6 @@ void Camera::init()
 {
 	play_oscillation = false;
 	oscillation_amplitude = 2.0f;
-	smooth_speed = 0.125f;
 }
 
 void Camera::update()
@@ -51,22 +50,11 @@ bool Camera::IsInsideView(const float x, const float y)
 	float world_x = x + _pos.x;
 	float world_y = y + _pos.y;
 
+	// Check if the object is in the active level
 	if (currentLevel != 0)
 	{
 		SDL_FRect area = GetLevelArea(currentLevel)[0];
-		if (currentLevel == 1)
-		{
-			if (!(world_x >= area.x && world_x <= area.x + area.w &&
-				world_y >= area.y && world_y <= area.y + area.h))
-				return false;
-		}
-		else if (currentLevel == 2)
-		{
-			if (!(world_x >= area.x && world_x <= area.x + area.w &&
-				world_y >= area.y && world_y <= area.y + area.h))
-				return false;
-		}
-		else if (currentLevel == 3)
+		if (currentLevel >= 1 && currentLevel <= 3)
 		{
 			if (!(world_x >= area.x && world_x <= area.x + area.w &&
 				world_y >= area.y && world_y <= area.y + area.h))
@@ -96,6 +84,7 @@ bool Camera::IsInsideView(const float x, const float y)
 	float min_y = -offset;
 	float max_y = camera_rect.h + offset;
 
+	// Check if the object is within the camera viewport
 	if (x >= min_x && x <= max_x
 		&& y >= min_y && y <= max_y)
 		return true;

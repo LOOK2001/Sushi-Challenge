@@ -24,6 +24,7 @@ void HealthBar::render(SDL_Renderer* ren)
 	SDL_FPoint camera_pos = camera->GetPos();
 	SDL_FPoint pos = GetGlobalPosition();
 
+	// Calculate the camera space position
 	float x = pos.x - camera_pos.x;
 	float y = pos.y - camera_pos.y;
 
@@ -53,6 +54,7 @@ void Character::init()
 	if (current_state.compare("none") == 0)
 		return;
 
+	// Get the width and height to display
 	if (state.size() > 0)
 	{
 		rect.w = state[current_state]->GetViewWidth();

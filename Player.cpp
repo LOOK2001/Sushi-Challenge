@@ -22,6 +22,7 @@ void Player::init()
 	camera->SetOcillationDuration(0.2f);
 	camera->SetOcillationAmplitude(3.5f);
 
+	// Health bar above the player
 	health_bar = new HealthBar(0, 0, GetWidth(), 20);
 	AddChild(health_bar);
 	health_bar->init();
@@ -32,6 +33,7 @@ void Player::update()
 	if (current_state.compare("none") == 0)
 		return;
 
+	// Update current state
 	state[current_state]->update();
 }
 
@@ -40,6 +42,7 @@ void Player::render(SDL_Renderer* ren)
 	if (current_state.compare("none") == 0)
 		return;
 
+	// Render current state
 	state[current_state]->Draw(rect.x, rect.y, 0.0, NULL, flip_sprite, 1, false);
 
 	Character::render(ren);
@@ -49,10 +52,10 @@ void Player::handle_events(SDL_Event& ev)
 {
 	if (ev.type == SDL_KEYDOWN)
 	{
-		key_pressed = true;
 		const Uint8* state = SDL_GetKeyboardState(NULL);
 		speed_y = speed_x = 0.0f;
 
+		// Player controller for moving
 		switch (ev.key.keysym.sym)
 		{
 		case SDLK_a:
@@ -63,7 +66,7 @@ void Player::handle_events(SDL_Event& ev)
 			}
 			flip_sprite = SDL_FLIP_HORIZONTAL;
 			SwitchState("walk");
-			translate(speed_x, speed_y);
+			Translate(speed_x, speed_y);
 			break;
 
 		case SDLK_d:
@@ -74,7 +77,7 @@ void Player::handle_events(SDL_Event& ev)
 			}
 			flip_sprite = SDL_FLIP_NONE;
 			SwitchState("walk");
-			translate(speed_x, speed_y);
+			Translate(speed_x, speed_y);
 			break;
 
 		case SDLK_w:
@@ -83,7 +86,7 @@ void Player::handle_events(SDL_Event& ev)
 				speed_y = speed * -0.5;
 				speed_x = (state[SDL_SCANCODE_D] != 0) ? speed * 0.5 : speed * -0.5;
 			}
-			translate(speed_x, speed_y);
+			Translate(speed_x, speed_y);
 			SwitchState("walk");
 			break;
 
@@ -93,14 +96,13 @@ void Player::handle_events(SDL_Event& ev)
 				speed_y *= 0.5;
 				speed_x = (state[SDL_SCANCODE_D] != 0) ? speed * 0.5 : speed * -0.5;
 			}
-			translate(speed_x, speed_y);
+			Translate(speed_x, speed_y);
 			SwitchState("walk");
 			break;
 		}
 	}
 	else if (ev.type == SDL_KEYUP)
 	{
-		key_pressed = false;
 		SwitchState("idle");
 	}
 	else if (ev.type == SDL_MOUSEMOTION || ev.type == SDL_MOUSEBUTTONDOWN || ev.type == SDL_MOUSEBUTTONUP)
@@ -116,6 +118,7 @@ void Player::handle_events(SDL_Event& ev)
 				SDL_FPoint dir = GetDirectionToMouse(x, y);
 
 				float radian = Vector2D::Angle(dir);
+				// Flip the weapon based on mouse position
 				if (radian > PI * 0.5 || radian < -PI * 0.5)
 					weapon->SetFlip(SDL_RendererFlip::SDL_FLIP_VERTICAL);
 				else
@@ -192,10 +195,12 @@ void Player::CollisionResponse(GameObject* other)
 			}
 		}
 	}
+	// prevent the player from walking through the wall
 	if (objectType == ObjectType::WALL)
 	{
-		translate(-speed_x, -speed_y);
+		Translate(-speed_x, -speed_y);
 	}
+	// Set active scene
 	if (objectType == ObjectType::LEVEL1)
 	{
 		Global::GetActiveScene()->SwitchLevel(1);

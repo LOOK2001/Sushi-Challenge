@@ -10,6 +10,7 @@
 #include <SDL2/SDL_image.h>
 
 
+// Image class holds image resource
 class Image {
 public:
 	Image(const char *name);
@@ -41,8 +42,6 @@ protected:
 	SDL_Surface* surface;
 	SDL_Texture* texture;
 	SDL_Rect view;
-	//int dest_w = view.w;
-	//int dest_h = view.h;
 };
 
 #endif //IMAGE_H

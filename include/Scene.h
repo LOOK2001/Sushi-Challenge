@@ -18,7 +18,7 @@
 
 class Global;
 class Application;
-// Scene Declaration:
+
 // Base class for Scene. Scene class manage every gameObjects in the scene
 class Scene
 {

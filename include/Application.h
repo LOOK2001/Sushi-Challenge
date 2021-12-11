@@ -1,4 +1,3 @@
-// Base class for maintaining global application state
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
@@ -12,6 +11,8 @@
 #include "Scene.h"
 #include "TextHandler.h"
 
+
+// Application class for maintaining global application state
 class Application
 {
 public:

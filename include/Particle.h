@@ -11,6 +11,7 @@
 #include "Image.h"
 
 
+// Class that maintaining particle
 class Particle : public RectObject 
 {
 public:

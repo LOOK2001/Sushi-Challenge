@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 
+// Class that maintaining bullet data like speed, direction and lifetime
 class Bullet : public TextureObject
 {
 public:
@@ -33,6 +34,7 @@ protected:
 };
 
 
+// Class that maintaining bomb
 class Bomb : public Bullet
 {
 public:
@@ -43,6 +45,7 @@ public:
 };
 
 
+// Class that maintaining weapon. Weapon can fire bullets
 class Weapon : public TextureObject
 {
 public:

@@ -7,6 +7,7 @@
 #include "Global.h"
 
 
+// Base class for sprite animation object
 class SpriteObject : public Image, public GameObject {
 public:
 	SpriteObject(unsigned count, double duration, const char* imageName = nullptr):
@@ -34,9 +35,10 @@ public:
 
 	void ResetViewCol() { view.x = 0; }
 
-	// Update width and height
+	// The number of column of the sprite sheet
 	void SetCount(const int count);
 	int GetCount() const { return frame_count; }
+	// How long for each column
 	void SetDuration(const double duration) { frame_duration = duration; }
 	double GetDuration() const { return frame_duration; }
 	

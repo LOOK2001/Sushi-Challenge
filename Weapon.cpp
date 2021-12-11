@@ -22,7 +22,7 @@ void Bullet::update()
 		DeleteObject(this);
 	}
 
-	translate(direction.x * speed, direction.y * speed);
+	Translate(direction.x * speed, direction.y * speed);
 	life_time--;
 }
 
@@ -55,7 +55,7 @@ void Bomb::update()
 		DeleteObject(this);
 	}
 
-	translate(direction.x * speed, direction.y * speed);
+	Translate(direction.x * speed, direction.y * speed);
 	life_time--;
 }
 
@@ -72,6 +72,7 @@ void Weapon::SetMuzzlePosition(const SDL_FPoint& _pos)
 
 SDL_FPoint Weapon::GetMuzzlePosition()
 {
+	// Get the muzzle position based on the rotation and parent's position
 	float angle = GetAngle();
 	SDL_FPoint center = GetCenter();
 	SDL_FPoint pos = Vector2D::RotatePoint(muzzle, angle, center);
@@ -81,10 +82,13 @@ SDL_FPoint Weapon::GetMuzzlePosition()
 
 void Weapon::Fire(const SDL_FPoint& dir)
 {
+	// Get the starting position
 	SDL_FPoint muzzle = GetMuzzlePosition();
+	// Create the bullet object
 	Bullet* bullet = new Bullet("./images/particle.png", muzzle.x, muzzle.y);
 	bullet->init();
 	bullet->SetDirection(dir);
 	bullet->SetSpeed(speed);
+	// Add the bullet instance into the active scene
 	AddInstance(bullet);
 }

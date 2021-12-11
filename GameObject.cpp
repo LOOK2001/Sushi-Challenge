@@ -6,7 +6,6 @@
 #include "include/Utils.h"
 
 
-// GameObject Implementation
 bool GameObject::AddChild(GameObject* obj)
 {
 	if (std::find(children.begin(), children.end(), obj) != children.end())
@@ -17,7 +16,6 @@ bool GameObject::AddChild(GameObject* obj)
 	return true;
 }
 
-
 bool GameObject::RemoveChild(GameObject* obj)
 {
 	if (std::find(children.begin(), children.end(), obj) == children.end())
@@ -27,7 +25,6 @@ bool GameObject::RemoveChild(GameObject* obj)
 	return true;
 }
 
-// RectObject Implementation
 void RectObject::init()
 {
 	GameObject::init();
@@ -121,13 +118,13 @@ SDL_FPoint RectObject::GetGlobalPosition() const
 	return global_position;
 }
 
-void RectObject::translate(const float x, const float y)
+void RectObject::Translate(const float x, const float y)
 {
 	rect.x += x;
 	rect.y += y;
 }
 
-void RectObject::rotate(float angle, SDL_FPoint p)
+void RectObject::Rotate(float angle, SDL_FPoint p)
 {
 	float radian = angle * PI / 180.f;
 	float x = (rect.x - p.x) * cos(radian) - (rect.y - p.y) * sin(radian) + p.x;
@@ -198,14 +195,10 @@ void RectFillObject::init()
 	RectObject::init();
 }
 
-// RectFillObject Implementation:
 void RectFillObject::render(SDL_Renderer* ren)
 {
 	if (!active)
 		return;
-
-	//SDL_FPoint pos = GetGlobalPosition();
-	//SDL_FRect tmp_rect = { pos.x, pos.y, rect.w, rect.h };
 
 	SDL_SetRenderDrawColor(ren, color.r, color.g, color.b, color.a);
 	SDL_RenderFillRectF(ren, &rect);
@@ -225,13 +218,13 @@ void RectFillObject::SetPosition(const float x, const float y)
 	rect.y = y;
 }
 
-void RectFillObject::translate(const float x, const float y)
+void RectFillObject::Translate(const float x, const float y)
 {
 	rect.x += x;
 	rect.y += y;
 }
 
-void RectFillObject::rotate(float angle, SDL_FPoint _c)
+void RectFillObject::Rotate(float angle, SDL_FPoint _c)
 {
 	float radian = angle * PI / 180.f;
 	float x = (rect.x - _c.x) * cos(radian) - (rect.y - _c.y) * sin(radian) + _c.x;

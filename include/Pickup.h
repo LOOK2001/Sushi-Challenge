@@ -7,6 +7,7 @@
 #include "ParticleEmitter.h"
 
 
+// Base class of pickup. Pickup is a sprite animation and can be collide
 class Pickup : public RectObject
 {
 public:
