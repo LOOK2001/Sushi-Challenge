@@ -1,7 +1,9 @@
 # Sushi-Challenge
 
 Here is the result:
-<video src='[your URL here](https://vimeo.com/manage/videos/907269317)' width=180/>
+
+<video src='https://vimeo.com/manage/videos/907269317' width=180/>
+
 -------------------
 
 The player is a sushi chef who are trapped in a dungeon by a Evil Sushi. That Evil Sushi doesn't want to be food anymore.
