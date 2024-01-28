@@ -2,7 +2,7 @@
 
 Here is the result:
 
-<video src='https://vimeo.com/manage/videos/907269317' width=180/>
+<video src='https://vimeo.com/manage/videos/907269317' width=180/></video>
 
 -------------------
 
